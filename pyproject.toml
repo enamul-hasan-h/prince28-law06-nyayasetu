@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "NyayaSetu is a digital platform designed to make legal information, assistance, and access to justice simpler and more accessible for everyone."
 readme = "README.md"
 authors = [
-    { name = "Aafiyah Tasneem", email = "aafiyahtasneem86@gmail.com" }
+    { name = "Enamul Hasan H", email = "hasanenamul.h@gmail.com" }
 ]
 requires-python = ">=3.12"
 dependencies = [
