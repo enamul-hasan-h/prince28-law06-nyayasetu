@@ -1,0 +1,26 @@
+[
+  {
+    "id": "001",
+    "title": "Legal Services Authorities Act, 1987",
+    "category": "Act",
+    "description": "An Act to constitute legal services authorities to provide free and competent legal services to eligible persons.",
+    "source": "India Code",
+    "language": "English"
+  },
+  {
+    "id": "002",
+    "title": "NALSA Free Legal Services Regulations",
+    "category": "Regulations",
+    "description": "Regulations governing free and competent legal services provided through legal services authorities.",
+    "source": "NALSA",
+    "language": "English"
+  },
+  {
+    "id": "003",
+    "title": "Lok Adalat",
+    "category": "Legal Service",
+    "description": "Lok Adalats provide a forum for settlement of disputes through compromise or amicable settlement.",
+    "source": "NALSA",
+    "language": "English"
+  }
+]
