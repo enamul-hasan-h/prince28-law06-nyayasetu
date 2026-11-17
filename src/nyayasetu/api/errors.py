@@ -48,9 +48,24 @@ async def validation_exception_handler(
     request: Request,
     exc: RequestValidationError,
 ) -> JSONResponse:
-    return problem_response(
-        request,
-        422,
-        "Validation Error",
-        "The request contains invalid or missing fields.",
+    errors = [
+        {
+            "field": ".".join(str(part) for part in error["loc"]),
+            "message": error["msg"],
+        }
+        for error in exc.errors()
+    ]
+
+    return JSONResponse(
+        status_code=422,
+        media_type="application/problem+json",
+        content={
+            "type": "about:blank",
+            "title": "Validation Error",
+            "status": 422,
+            "detail": "The request contains invalid or missing fields.",
+            "instance": request.url.path,
+            "request_id": request_id_ctx.get(),
+            "errors": errors,
+        },
     )
