@@ -39,5 +39,127 @@
     "eligible_group": "Women victims or survivors of sexual assault and other covered crimes, including eligible dependants",
     "benefit": "Financial compensation and rehabilitation support under the scheme",
     "authority_level": "State Legal Services Authority and District Legal Services Authority"
-  }
+  },
+
+{
+  "id": "006",
+  "scheme": "NALSA Legal Services to Disaster Victims through Legal Services Authorities Scheme, 2010",
+  "section": "Legal Services Authorities Act, 1987 - Section 12(e)",
+  "eligible_group": "Persons affected by mass disasters, ethnic violence, caste atrocities, floods, droughts, earthquakes or industrial disasters who are under circumstances of underserved want",
+  "benefit": "Access to legal services and assistance through Legal Services Authorities",
+  "authority_level": "Taluk, District or State Legal Services Authority, depending on jurisdiction"
+},
+{
+  "id": "007",
+  "scheme": "NALSA Victims of Trafficking and Commercial Sexual Exploitation Scheme, 2015",
+  "section": "Legal Services Authorities Act, 1987 - Section 12(b)",
+  "eligible_group": "Victims of human trafficking and commercial sexual exploitation",
+  "benefit": "Legal services, legal awareness and assistance in accessing legal protections and remedies",
+  "authority_level": "Taluk, District or State Legal Services Authority, depending on jurisdiction"
+},
+{
+  "id": "008",
+  "scheme": "NALSA Legal Services to Workers in the Unorganized Sector Scheme, 2015",
+  "section": null,
+  "eligible_group": "Workers in the unorganized sector who need legal assistance concerning their rights and entitlements",
+  "benefit": "Legal awareness and assistance in accessing applicable labour rights, welfare benefits and legal remedies",
+  "authority_level": "Taluk, District or State Legal Services Authority, depending on jurisdiction"
+},
+{
+  "id": "009",
+  "scheme": "NALSA Effective Implementation of Poverty Alleviation Schemes, 2015",
+  "section": null,
+  "eligible_group": "People facing difficulties in accessing applicable government poverty alleviation schemes and entitlements",
+  "benefit": "Legal awareness and assistance in accessing applicable welfare schemes and resolving related legal obstacles",
+  "authority_level": "Taluk, District or State Legal Services Authority, depending on jurisdiction"
+},
+{
+  "id": "010",
+  "scheme": "NALSA Protection and Enforcement of Tribal Rights Scheme, 2015",
+  "section": null,
+  "eligible_group": "Members of tribal communities seeking protection or enforcement of their legal rights",
+  "benefit": "Legal awareness and assistance concerning applicable tribal rights and legal protections",
+  "authority_level": "Taluk, District or State Legal Services Authority, depending on jurisdiction"
+},
+{
+  "id": "011",
+  "scheme": "NALSA Legal Services to Victims of Drug Abuse and Eradication of Drug Menace Scheme, 2015",
+  "section": null,
+  "eligible_group": "Persons affected by drug abuse and individuals requiring legal assistance in related matters",
+  "benefit": "Legal awareness and assistance concerning legal rights, protections and available support mechanisms",
+  "authority_level": "Taluk, District or State Legal Services Authority, depending on jurisdiction"
+},
+{
+  "id": "012",
+  "scheme": "NALSA Legal Services to Senior Citizens Scheme, 2016",
+  "section": null,
+  "eligible_group": "Senior citizens requiring assistance concerning their legal rights and protections; free legal aid eligibility depends on applicable Tamil Nadu rules",
+  "benefit": "Legal awareness and assistance concerning the rights and legal protections of senior citizens",
+  "authority_level": "Taluk, District or State Legal Services Authority, depending on jurisdiction"
+},
+{
+  "id": "013",
+  "scheme": "NALSA Legal Services to Victims of Acid Attacks Scheme, 2016",
+  "section": null,
+  "eligible_group": "Victims and survivors of acid attacks",
+  "benefit": "Legal assistance and awareness concerning legal remedies, rights and available protections",
+  "authority_level": "Taluk, District or State Legal Services Authority, depending on jurisdiction"
+},
+{
+  "id": "014",
+  "scheme": "NALSA Compensation Scheme for Women Victims or Survivors of Sexual Assault or Other Crimes, 2018",
+  "section": null,
+  "eligible_group": "Women victims or survivors covered by the applicable compensation scheme",
+  "benefit": "Victim compensation and rehabilitation support subject to the scheme's eligibility conditions and applicable procedures",
+  "authority_level": "Tamil Nadu State Legal Services Authority or District Legal Services Authority"
+},
+{
+  "id": "015",
+  "scheme": "NALSA Child-Friendly Legal Services for Children Scheme, 2024",
+  "section": null,
+  "eligible_group": "Children requiring legal assistance, protection or representation",
+  "benefit": "Child-friendly legal services and assistance in accessing legal protection and justice mechanisms",
+  "authority_level": "Taluk, District or State Legal Services Authority, depending on jurisdiction"
+},
+{
+  "id": "016",
+  "scheme": "NALSA Legal Services to Persons with Mental Illness and Persons with Intellectual Disabilities Scheme, 2024",
+  "section": "Legal Services Authorities Act, 1987 - Section 12(d)",
+  "eligible_group": "Persons with mental illness and persons with intellectual disabilities",
+  "benefit": "Legal assistance and support in accessing rights, protections and justice mechanisms",
+  "authority_level": "Taluk, District or State Legal Services Authority, depending on jurisdiction"
+},
+{
+  "id": "017",
+  "scheme": "NALSA SHIKSHA Scheme for Holistic Inclusion, Knowledge and Schooling through Help and Access, 2026",
+  "section": null,
+  "eligible_group": "Children and persons covered by the scheme's provisions concerning access to education and schooling",
+  "benefit": "Legal services and assistance within the scheme's focus on educational access, inclusion and schooling",
+  "authority_level": "Legal Services Authorities at the appropriate jurisdictional level"
+},
+{
+  "id": "018",
+  "scheme": "NALSA JAGRITI Scheme, 2025",
+  "section": null,
+  "eligible_group": "People and communities targeted by the scheme's grassroots justice-awareness initiatives",
+  "benefit": "Justice awareness and improved access to information about legal services through the scheme",
+  "authority_level": "National Legal Services Authority and State or District Legal Services Authorities"
+},
+{
+  "id": "019",
+  "scheme": "NALSA DAWN Scheme - Drug Awareness and Wellness Navigation for a Drug-Free India, 2025",
+  "section": null,
+  "eligible_group": "People and communities covered by the scheme's drug-awareness and prevention initiatives",
+  "benefit": "Drug awareness and wellness-navigation support under the scheme",
+  "authority_level": "National Legal Services Authority and State or District Legal Services Authorities"
+},
+{
+  "id": "020",
+  "scheme": "NALSA Scheme on Access to Justice for Victims of Human-Wildlife Conflict, 2025",
+  "section": null,
+  "eligible_group": "Victims affected by human-wildlife conflict",
+  "benefit": "Access-to-justice assistance and legal support under the scheme",
+  "authority_level": "State or District Legal Services Authority, depending on jurisdiction"
+}
+
 ]
