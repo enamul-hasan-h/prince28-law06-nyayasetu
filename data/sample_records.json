@@ -1,26 +1,43 @@
+
 [
   {
     "id": "001",
-    "title": "Legal Services Authorities Act, 1987",
-    "category": "Act",
-    "description": "An Act to constitute legal services authorities to provide free and competent legal services to eligible persons.",
-    "source": "India Code",
-    "language": "English"
+    "scheme": "Legal Services Authorities Act, 1987",
+    "section": "Section 12",
+    "eligible_group": "Scheduled Castes and Scheduled Tribes, victims of trafficking or begar, women, children, persons with disabilities, victims of mass disasters and specified forms of violence, industrial workmen, persons in custody, and persons meeting the prescribed income criteria",
+    "benefit": "Entitlement to free legal services, subject to the Act's requirements",
+    "authority_level": "National, State, District and Taluk Legal Services Authorities"
   },
   {
     "id": "002",
-    "title": "NALSA Free Legal Services Regulations",
-    "category": "Regulations",
-    "description": "Regulations governing free and competent legal services provided through legal services authorities.",
-    "source": "NALSA",
-    "language": "English"
+    "scheme": "Legal Services Authorities Act, 1987",
+    "section": "Section 13",
+    "eligible_group": "Persons satisfying any of the eligibility criteria under Section 12",
+    "benefit": "Free legal services where the concerned authority is satisfied that the applicant has a prima facie case to prosecute or defend",
+    "authority_level": "Concerned Legal Services Authority"
   },
   {
     "id": "003",
-    "title": "Lok Adalat",
-    "category": "Legal Service",
-    "description": "Lok Adalats provide a forum for settlement of disputes through compromise or amicable settlement.",
-    "source": "NALSA",
-    "language": "English"
+    "scheme": "NALSA (Free and Competent Legal Services) Regulations, 2010",
+    "section": "Regulation 7",
+    "eligible_group": "Applicants seeking free legal services under Section 12 of the Legal Services Authorities Act, 1987",
+    "benefit": "Application scrutiny and decision on legal aid; the decision is to be taken immediately and within seven days of receiving the application",
+    "authority_level": "Supreme Court, State, High Court, District and Taluk Legal Services Institutions"
+  },
+  {
+    "id": "004",
+    "scheme": "Lok Adalat",
+    "section": null,
+    "eligible_group": "Parties to pending court cases and parties to eligible pre-litigation disputes",
+    "benefit": "Amicable settlement of eligible disputes through compromise; Lok Adalat awards are final and binding",
+    "authority_level": "National, State, District and Taluk Legal Services Authorities"
+  },
+  {
+    "id": "005",
+    "scheme": "NALSA Compensation Scheme for Women Victims/Survivors of Sexual Assault/Other Crimes, 2018",
+    "section": null,
+    "eligible_group": "Women victims or survivors of sexual assault and other covered crimes, including eligible dependants",
+    "benefit": "Financial compensation and rehabilitation support under the scheme",
+    "authority_level": "State Legal Services Authority and District Legal Services Authority"
   }
 ]
