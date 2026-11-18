@@ -1,3 +1,22 @@
+# Day 3 – PostgreSQL Implementation Notes
+
+## Day 3 – Part 2: Database Migrations
+
+Created two Alembic migrations for the PostgreSQL database.
+
+1. `ac53a5fd3d76` – create documents and pages.
+2. `e27f96b16ce8` – add GIN index on metadata.
+
+### Migration Verification
+
+- `python -m alembic history`: Both migrations listed; `e27f96b16ce8` is head.
+- `python -m alembic current`: `e27f96b16ce8 (head)`.
+- `python -m alembic downgrade -1`: Successfully downgraded from `e27f96b16ce8` to `ac53a5fd3d76`.
+- `python -m alembic current` after downgrade: `ac53a5fd3d76`.
+- `python -m alembic upgrade head`: Successfully upgraded from `ac53a5fd3d76` to `e27f96b16ce8`.
+- Final `python -m alembic current`: `e27f96b16ce8 (head)`.
+
+**Status:** Migration history, downgrade, and upgrade verified successfully.
 
 ## Day 3 – Part 3: Idempotent Database Loader
 
@@ -14,17 +33,20 @@ Implemented:
 ### Test Results
 
 1. Initial load:
+
    `records=20 inserted=20 updated=0 unchanged=0`
 
 2. Second load:
+
    `records=20 inserted=0 updated=0 unchanged=20`
 
 3. After editing record 001:
+
    `records=20 inserted=0 updated=1 unchanged=19`
 
 **Status:** All three tests passed.
 
-## Day 3 - Part 5: Automated Tests
+## Day 3 – Part 5: Automated Tests
 
 Implemented API unit tests using a fake repository and fake database session.
 
@@ -39,7 +61,7 @@ Implemented API unit tests using a fake repository and fake database session.
 ### Integration Test Results
 
 - 3 PostgreSQL integration tests created.
-- Skipped because TEST_DATABASE_URL is not configured.
+- Skipped because `TEST_DATABASE_URL` is not configured.
 - Tests cover filtered listing, document retrieval and missing documents.
 
 **Test command:** `python -m pytest -v`
@@ -48,25 +70,26 @@ Implemented API unit tests using a fake repository and fake database session.
 
 **Ruff:** All checks passed.
 
-## Day 3 - Part 6: PostgreSQL EXPLAIN
+## Day 3 – Part 6: PostgreSQL EXPLAIN
 
 Created `scripts/explain.py` to inspect PostgreSQL query plans for JSONB metadata filters.
 
 ### EXPLAIN Results
 
 Query:
+
 `metadata @> '{"section": "Section 12"}'::jsonb`
 
 Normal planner:
-- Seq Scan on documents
-- 1 matching row
-- Execution time: 0.040 ms
+- Seq Scan on documents.
+- 1 matching row.
+- Execution time: 0.040 ms.
 
 With sequential scans disabled:
-- Bitmap Heap Scan
-- Bitmap Index Scan on ix_documents_metadata_gin
-- 1 matching row
-- Execution time: 0.107 ms
+- Bitmap Heap Scan.
+- Bitmap Index Scan on `ix_documents_metadata_gin`.
+- 1 matching row.
+- Execution time: 0.107 ms.
 
 ### Why did PostgreSQL choose a Seq Scan?
 
