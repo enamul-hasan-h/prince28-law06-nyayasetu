@@ -1,8 +1,13 @@
 """Health and readiness endpoints."""
 
-from fastapi import APIRouter, HTTPException
+from typing import Any
 
-from nyayasetu.api.deps import StoreDep
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
+
+from nyayasetu.api.deps import SessionDep
 
 router = APIRouter(tags=["health"])
 
@@ -13,11 +18,19 @@ def health() -> dict[str, str]:
 
 
 @router.get("/ready")
-def ready(store: StoreDep) -> dict[str, str]:
-    if not store.ready:
-        raise HTTPException(
+async def ready(session: SessionDep) -> Any:
+    try:
+        await session.execute(text("SELECT 1"))
+    except (SQLAlchemyError, OSError):
+        return JSONResponse(
             status_code=503,
-            detail="Document store is not ready.",
+            content={
+                "status": "not_ready",
+                "checks": {"database": False},
+            },
         )
 
-    return {"status": "ready"}
+    return {
+        "status": "ready",
+        "checks": {"database": True},
+    }

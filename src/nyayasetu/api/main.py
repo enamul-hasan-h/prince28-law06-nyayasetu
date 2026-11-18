@@ -12,8 +12,8 @@ from nyayasetu.api.errors import (
 from nyayasetu.api.middleware import RequestContextMiddleware
 from nyayasetu.api.routes import documents, health
 from nyayasetu.config import Settings, get_settings
+from nyayasetu.db.session import SessionLocal, engine
 from nyayasetu.logging_setup import setup_logging
-from nyayasetu.store import RecordStore
 
 logger = logging.getLogger("nyayasetu")
 
@@ -22,23 +22,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or get_settings()
 
     setup_logging(settings.log_level)
-    store = RecordStore(settings.data_file)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         app.state.settings = settings
-        app.state.store = store
+        app.state.session_factory = SessionLocal
+
+        logger.info("NyayaSetu API started")
 
         try:
-            store.load()
-            logger.info(
-                "records loaded",
-                extra={"records": len(store.search())},
-            )
-        except Exception:
-            logger.exception("failed to load records")
-
-        yield
+            yield
+        finally:
+            await engine.dispose()
+            logger.info("NyayaSetu API stopped")
 
     app = FastAPI(
         title="NyayaSetu API",
