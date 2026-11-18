@@ -1,4 +1,4 @@
-"""All settings come from environment variables (or a local .env file)."""
+"""Application settings loaded from environment variables."""
 
 from functools import lru_cache
 from pathlib import Path
@@ -15,16 +15,12 @@ class Settings(BaseSettings):
     )
 
     app_name: str = "nyayasetu"
-
-    # No default on purpose: missing APP_ENV prevents startup.
     app_env: Literal["local", "ci", "production"]
-
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
-
     data_file: Path = Path("data/sample_records.json")
+    database_url: str
 
 
 @lru_cache
 def get_settings() -> Settings:
-    """Build the settings once and reuse them."""
     return Settings()
