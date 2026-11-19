@@ -12,6 +12,8 @@ from nyayasetu.db.models import Document
 from nyayasetu.db.repository import DocumentRepository
 from nyayasetu.db.url import to_asyncpg_url
 
+pytestmark = pytest.mark.integration
+
 
 @pytest.fixture
 def test_database_url():

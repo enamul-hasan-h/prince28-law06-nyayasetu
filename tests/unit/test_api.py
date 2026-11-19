@@ -3,6 +3,8 @@ from pydantic import ValidationError
 
 from nyayasetu.config import Settings
 
+pytestmark = pytest.mark.unit
+
 
 def test_health_is_ok(client):
     response = client.get("/health")
