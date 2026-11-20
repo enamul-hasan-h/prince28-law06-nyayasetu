@@ -41,7 +41,7 @@ jobs:
       - run: uv sync --locked
       - run: uv run poe lint
       - name: Unit + integration tests with coverage
-        run: uv run poe cov
+        run: uv run poe coverage
 
   image:
     name: build image
