@@ -1,8 +1,11 @@
 # NyayaSetu
 
+[![CI](https://github.com/enamul-hasan-h/prince28-law06-nyayasetu/actions/workflows/ci.yml/badge.svg)](https://github.com/enamul-hasan-h/prince28-law06-nyayasetu/actions/workflows/ci.yml)
+[![Live](https://img.shields.io/website?url=https%3A%2F%2Fnyayasetu-9ck6.onrender.com%2Fhealth&label=live)](https://nyayasetu-9ck6.onrender.com/docs)
+
 NyayaSetu helps para-legal volunteers identify who qualifies for free legal aid, which authority to approach, and which NALSA scheme applies, in Tamil and English.
 
-**Status:** Day 4 foundation complete — FastAPI, PostgreSQL, Docker, automated tests, and quality gates. Live deployment planned for Day 5.
+**Status:** Week 1 complete - CI/CD configured - Live: https://nyayasetu-9ck6.onrender.com
 
 ## Who it's for
 
