@@ -9,7 +9,16 @@ pytestmark = pytest.mark.unit
 def test_health_is_ok(client):
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    assert response.json() == {"status": "ok", "git_sha": "dev"}
+
+
+def test_health_reports_configured_git_sha(client):
+    client.app.state.settings.git_sha = "abc123"
+
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok", "git_sha": "abc123"}
 
 
 def test_ready_when_database_is_available(client):

@@ -1,4 +1,4 @@
-﻿# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1
 
 # ---------- Stage 1: Build ----------
 FROM python:3.12-slim AS builder
@@ -32,6 +32,8 @@ COPY --chown=app:app migrations ./migrations
 COPY --chown=app:app scripts ./scripts
 COPY --chown=app:app data ./data
 
+ARG GIT_SHA=dev
+ENV GIT_SHA=${GIT_SHA}
 ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 
 USER app

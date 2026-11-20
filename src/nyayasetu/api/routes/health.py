@@ -7,14 +7,17 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-from nyayasetu.api.deps import SessionDep
+from nyayasetu.api.deps import SessionDep, SettingsDep
 
 router = APIRouter(tags=["health"])
 
 
 @router.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
+def health(settings: SettingsDep) -> dict[str, str]:
+    return {
+        "status": "ok",
+        "git_sha": settings.git_sha,
+    }
 
 
 @router.get("/ready")
