@@ -220,3 +220,43 @@ Updated README.md with:
 - Makefile usage.
 
 **Day 4 status:** Docker image, Compose services, database migrations, unit tests, integration tests, coverage, linting, formatting and documentation completed successfully.
+
+## Day 5: CI/CD and Live Deployment
+
+### Live deployment
+- Live URL: https://nyayasetu-9ck6.onrender.com
+- API documentation: https://nyayasetu-9ck6.onrender.com/docs
+- Health endpoint: https://nyayasetu-9ck6.onrender.com/health
+- Readiness endpoint: https://nyayasetu-9ck6.onrender.com/ready
+- CI workflow: https://github.com/enamul-hasan-h/prince28-law06-nyayasetu/actions/workflows/ci.yml
+- CD workflow: https://github.com/enamul-hasan-h/prince28-law06-nyayasetu/actions/workflows/cd.yml
+
+### CI/CD verification
+- CI pipeline: lint, tests and Docker image build.
+- Main branch protection: enabled.
+- CD pipeline: database migrations, Render deployment and live smoke test.
+- Latest live health check: HTTP 200.
+- Latest observed deployed Git SHA: `3ab59f65b0e559f15cbf80635a6a7fd79e96e461`
+- Deployment lead time: [Fill in after recording timestamps]
+
+### Rollback drill
+- Rolled back to SHA: `61349462d3f0f81802f202150a8121cbedcf98fd` - Successful
+- Rollback start time: Not recorded
+- Smoke test: Passed
+- Rolled forward to SHA: `3ab59f65b0e559f15cbf80635a6a7fd79e96e461` - Successful
+- Roll-forward duration: Not recorded
+
+### Secrets management
+- Neon database URL: GitHub Secret `DATABASE_URL` and Render environment.
+- Render deploy hook: GitHub Secret `RENDER_DEPLOY_HOOK`.
+- Secret values are not stored in Git or Docker images.
+
+### Monitoring
+- UptimeRobot monitor: NyayaSetu Health.
+- Endpoint monitored: `/health`
+- Check interval: 5 minutes.
+- Email alerts configured.
+- Status: Direct health endpoint verified HTTP 200; UptimeRobot alert delivery remains unverified.
+
+### First-request performance
+- Render Free service may take time to wake after inactivity.
