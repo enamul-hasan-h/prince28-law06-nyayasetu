@@ -1,4 +1,4 @@
-# CI: every pull request and every push to main.
+﻿# CI: every pull request and every push to main.
 # lint -> unit + integration tests -> build image -> push it (main only)
 
 name: CI
@@ -33,7 +33,8 @@ jobs:
     env:
       APP_ENV: ci
       DATABASE_URL: postgresql://app:app@localhost:5433/app  # pragma: allowlist secret
-      TEST_DATABASE_URL: postgresql://app:app@localhost:5433/app  # pragma: allowlist secret
+      TEST_DATABASE_ADMIN_URL: postgresql://app:app@localhost:5433/postgres  # pragma: allowlist secret
+      TEST_DATABASE_URL: postgresql://app:app@localhost:5433/app_test  # pragma: allowlist secret
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
@@ -42,8 +43,10 @@ jobs:
           enable-cache: true
       - run: uv sync --locked
       - run: uv run poe lint
-      - name: Unit + integration tests with coverage
-        run: uv run poe coverage
+      - name: Unit tests with coverage
+        run: uv run pytest -m "not integration" --cov=nyayasetu --cov-report=term-missing
+      - name: Integration tests with migrations
+        run: uv run poe test-integration
 
   image:
     name: build image
