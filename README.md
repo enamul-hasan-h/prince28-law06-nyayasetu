@@ -55,7 +55,7 @@ Official sources:
 - **Containerization:** Docker, Docker Compose
 - **Cache service:** Redis
 
-## Run locally
+## Run locally in one command
 
 ### Prerequisites
 

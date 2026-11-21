@@ -1,13 +1,15 @@
-# Day 3 – PostgreSQL Implementation Notes
+# NyayaSetu Implementation Notes
 
-## Day 3 – Part 2: Database Migrations
+## D03 – PostgreSQL Implementation
+
+### Day 3 – Part 2: Database Migrations
 
 Created two Alembic migrations for the PostgreSQL database.
 
-1. `ac53a5fd3d76` – create documents and pages.
-2. `e27f96b16ce8` – add GIN index on metadata.
+1. `ac53a5fd3d76` – Create documents and pages.
+2. `e27f96b16ce8` – Add GIN index on metadata.
 
-### Migration Verification
+#### Migration Verification
 
 - `python -m alembic history`: Both migrations listed; `e27f96b16ce8` is head.
 - `python -m alembic current`: `e27f96b16ce8 (head)`.
@@ -18,7 +20,7 @@ Created two Alembic migrations for the PostgreSQL database.
 
 **Status:** Migration history, downgrade, and upgrade verified successfully.
 
-## Day 3 – Part 3: Idempotent Database Loader
+### Day 3 – Part 3: Idempotent Database Loader
 
 Created `scripts/load_db.py` to load legal scheme records from `data/sample_records.json` into PostgreSQL.
 
@@ -30,7 +32,7 @@ Implemented:
 - Skip unchanged records.
 - Transaction-based database operations.
 
-### Test Results
+#### Test Results
 
 1. Initial load:
 
@@ -46,11 +48,11 @@ Implemented:
 
 **Status:** All three tests passed.
 
-## Day 3 – Part 5: Automated Tests
+### Day 3 – Part 5: Automated Tests
 
 Implemented API unit tests using a fake repository and fake database session.
 
-### Unit Test Results
+#### Unit Test Results
 
 - 16 unit tests passed.
 - API health and readiness checks tested.
@@ -58,10 +60,10 @@ Implemented API unit tests using a fake repository and fake database session.
 - Document retrieval and 404 responses tested.
 - Invalid query parameters and request IDs tested.
 
-### Integration Test Results
+#### Integration Test Results
 
 - 3 PostgreSQL integration tests created.
-- Skipped because `TEST_DATABASE_URL` is not configured.
+- Skipped because `TEST_DATABASE_URL` was not configured at that stage.
 - Tests cover filtered listing, document retrieval and missing documents.
 
 **Test command:** `python -m pytest -v`
@@ -70,11 +72,11 @@ Implemented API unit tests using a fake repository and fake database session.
 
 **Ruff:** All checks passed.
 
-## Day 3 – Part 6: PostgreSQL EXPLAIN
+### Day 3 – Part 6: PostgreSQL EXPLAIN
 
 Created `scripts/explain.py` to inspect PostgreSQL query plans for JSONB metadata filters.
 
-### EXPLAIN Results
+#### EXPLAIN Results
 
 Query:
 
@@ -91,19 +93,21 @@ With sequential scans disabled:
 - 1 matching row.
 - Execution time: 0.107 ms.
 
-### Why did PostgreSQL choose a Seq Scan?
+#### Why did PostgreSQL choose a Seq Scan?
 
 The documents table contains only 20 records. Reading the entire small table is cheaper than using an index and fetching matching rows.
 
-### When would PostgreSQL use the GIN index?
+#### When would PostgreSQL use the GIN index?
 
 As the table grows and JSONB filtering becomes more selective, PostgreSQL may choose the GIN index when its estimated cost is lower.
 
 **Status:** GIN index usage successfully verified.
 
-# Day 4 - Docker, Testing and Quality Automation
+---
 
-## Part 1: Production Dockerfile
+## D04 – Docker, Testing and Quality Automation
+
+### Part 1: Production Dockerfile
 
 Created a multi-stage Dockerfile.
 
@@ -115,13 +119,13 @@ Implemented:
 - Non-root application user.
 - Uvicorn application startup.
 
-### Docker Verification
+#### Docker Verification
 
 - Image built successfully: `nyayasetu:dev`.
 - Runtime user verified as `app` (UID 999).
 - Docker build cache verified.
 
-## Part 2: Docker Compose
+### Part 2: Docker Compose
 
 Created `docker-compose.yml` with the following services:
 
@@ -132,7 +136,7 @@ Created `docker-compose.yml` with the following services:
 
 Created `docker/initdb/01-create-test-db.sql` to initialize the dedicated `app_test` database.
 
-### Docker Verification
+#### Docker Verification
 
 - `docker compose config`: Successful.
 - PostgreSQL health check: Healthy.
@@ -142,7 +146,7 @@ Created `docker/initdb/01-create-test-db.sql` to initialize the dedicated `app_t
 - `/health`: Returns `{"status":"ok"}`.
 - `/ready`: Returns database readiness successfully.
 
-## Part 3: Unit and Integration Tests
+### Part 3: Unit and Integration Tests
 
 Organized tests into separate directories:
 
@@ -154,7 +158,7 @@ Configured pytest markers:
 - `unit`
 - `integration`
 
-### Test Results
+#### Test Results
 
 - Unit tests: 16 passed.
 - Integration tests: 3 passed.
@@ -166,7 +170,7 @@ Integration tests verified:
 - Document retrieval.
 - Missing document handling.
 
-## Part 4: Coverage and Quality Automation
+### Part 4: Coverage and Quality Automation
 
 Added development dependencies:
 - pytest-asyncio
@@ -178,7 +182,7 @@ Configured pytest coverage:
 - Minimum required coverage: 70%.
 - Missing lines displayed in reports.
 
-### Coverage Results
+#### Coverage Results
 
 - Total statements: 239.
 - Missed statements: 17.
@@ -186,7 +190,7 @@ Configured pytest coverage:
 - Required coverage: 70%.
 - Result: Passed.
 
-### Poe Tasks
+#### Poe Tasks
 
 Configured commands:
 - `uv run poe test`
@@ -199,7 +203,7 @@ Configured commands:
 
 Ruff lint and formatting checks passed.
 
-## Part 5: Makefile and Documentation
+### Part 5: Makefile and Documentation
 
 Created a Makefile with targets for:
 - Installation.
@@ -221,9 +225,12 @@ Updated README.md with:
 
 **Day 4 status:** Docker image, Compose services, database migrations, unit tests, integration tests, coverage, linting, formatting and documentation completed successfully.
 
-## Day 5: CI/CD and Live Deployment
+---
 
-### Live deployment
+## D05 – CI/CD and Live Deployment
+
+### Live Deployment
+
 - Live URL: https://nyayasetu-9ck6.onrender.com
 - API documentation: https://nyayasetu-9ck6.onrender.com/docs
 - Health endpoint: https://nyayasetu-9ck6.onrender.com/health
@@ -231,32 +238,37 @@ Updated README.md with:
 - CI workflow: https://github.com/enamul-hasan-h/prince28-law06-nyayasetu/actions/workflows/ci.yml
 - CD workflow: https://github.com/enamul-hasan-h/prince28-law06-nyayasetu/actions/workflows/cd.yml
 
-### CI/CD verification
-- CI pipeline: lint, tests and Docker image build.
-- Main branch protection: enabled.
-- CD pipeline: database migrations, Render deployment and live smoke test.
+### CI/CD Verification
+
+- CI pipeline: Lint, tests and Docker image build.
+- Main branch protection: Enabled.
+- CD pipeline: Database migrations, Render deployment and live smoke test.
 - Latest live health check: HTTP 200.
 - Latest observed deployed Git SHA: `3ab59f65b0e559f15cbf80635a6a7fd79e96e461`
-- Deployment lead time: [Fill in after recording timestamps]
+- Deployment lead time: Not recorded; requires timestamp verification.
 
-### Rollback drill
-- Rolled back to SHA: `61349462d3f0f81802f202150a8121cbedcf98fd` - Successful
-- Rollback start time: Not recorded
-- Smoke test: Passed
-- Rolled forward to SHA: `3ab59f65b0e559f15cbf80635a6a7fd79e96e461` - Successful
-- Roll-forward duration: Not recorded
+### Rollback Drill
 
-### Secrets management
+- Rolled back to SHA: `61349462d3f0f81802f202150a8121cbedcf98fd` – Successful.
+- Rollback start time: Not recorded.
+- Smoke test: Passed.
+- Rolled forward to SHA: `3ab59f65b0e559f15cbf80635a6a7fd79e96e461` – Successful.
+- Roll-forward duration: Not recorded.
+
+### Secrets Management
+
 - Neon database URL: GitHub Secret `DATABASE_URL` and Render environment.
 - Render deploy hook: GitHub Secret `RENDER_DEPLOY_HOOK`.
 - Secret values are not stored in Git or Docker images.
 
 ### Monitoring
+
 - UptimeRobot monitor: NyayaSetu Health.
-- Endpoint monitored: `/health`
+- Endpoint monitored: `/health`.
 - Check interval: 5 minutes.
 - Email alerts configured.
 - Status: Direct health endpoint verified HTTP 200; UptimeRobot alert delivery remains unverified.
 
-### First-request performance
-- Render Free service may take time to wake after inactivity.
+### First-Request Performance
+
+Render Free service may take time to wake after inactivity.
