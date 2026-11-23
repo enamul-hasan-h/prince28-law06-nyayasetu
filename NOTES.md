@@ -25,6 +25,7 @@ Created two Alembic migrations for the PostgreSQL database.
 Created `scripts/load_db.py` to load legal scheme records from `data/sample_records.json` into PostgreSQL.
 
 Implemented:
+
 - SHA256 fingerprints for change detection.
 - Canonical JSON serialization for consistent fingerprints.
 - Insert new records.
@@ -272,3 +273,138 @@ Updated README.md with:
 ### First-Request Performance
 
 Render Free service may take time to wake after inactivity.
+
+---
+
+## D06 – Corpus Collection Foundation
+
+### Part 1: Source Research and Permission Review
+
+Created a provisional inventory of 10 NALSA legal-service schemes.
+
+Reviewed official NALSA source pages and website reuse policies.
+
+Research findings:
+- Three official NALSA page references recorded in `data/sources.csv`.
+- All three sources remain marked `Permission pending`.
+- Reuse permission must be clarified before automated collection or reproduction.
+- Research reference PDFs are kept outside the active corpus and excluded from Git.
+- No legal documents have been approved for active corpus inclusion.
+
+### Part 2: URL, Git Repository and Manual Downloader
+
+Implemented the corpus collection foundation in:
+- `src/nyayasetu/ingest/fetch.py`
+- `scripts/fetch.py`
+
+Implemented:
+- Robots.txt checks with fail-closed handling for relevant network failures.
+- Per-host request delays.
+- Configurable asynchronous downloads.
+- Concurrency limits capped at four.
+- Permission confirmation safeguards.
+- Manifest-based resume behaviour.
+- SHA-256 integrity metadata.
+- Git repository collection with path and extension filters.
+- Manual local-file collection with supported file-type validation.
+- Permission and licence validation for manual collection.
+- Duplicate/resume checks using manifest records.
+- Protection against overwriting unrecorded destination files.
+- Temporary `.part` file cleanup.
+
+The CLI now provides four collection modes:
+- `urls`: Collect approved URLs.
+- `repo`: Collect eligible files from a Git repository.
+- `manual`: Collect an explicitly supplied local document.
+- `sitemap`: Discover candidate URLs without downloading content.
+
+### Part 3: Sitemap Discovery
+
+Created `src/nyayasetu/ingest/sitemap.py`.
+
+Implemented:
+- Sitemap URL validation.
+- Sitemap index discovery.
+- Robots.txt permission checks.
+- Sitemap and candidate URL deduplication.
+- Sitemap count and candidate limits.
+- Discovery-only CSV output.
+- Permission-pending status for discovered candidates.
+
+Sitemap discovery does not download document content.
+
+### Part 4: Offline Testing
+
+Created and extended unit tests for downloader, repository CLI, manual collection CLI and sitemap functionality.
+
+#### Verification
+
+- Fetch module tests: 19 passed.
+- Sitemap tests: 7 passed.
+- CLI tests: 17 passed.
+- Full project test suite: 60 passed, 3 skipped.
+- Ruff lint: All checks passed.
+- Python compilation checks: Passed.
+- Pre-commit hooks: All 9 passed.
+
+The manual collection CLI tests cover:
+- Successful local-file collection and manifest metadata.
+- SHA-256 metadata recording.
+- Resume behaviour when a file is already recorded.
+- Refusal without permission confirmation.
+- Refusal when permission is pending.
+- Missing-file handling.
+- Unsupported file extension handling.
+- Protection against overwriting existing unrecorded files.
+- Cleanup of temporary `.part` files.
+
+A local synthetic Git repository verified:
+- Matching file downloads.
+- Extension filtering.
+- Manifest metadata and SHA-256 values.
+- Resume behaviour on a second run.
+- No leftover partial files.
+
+Synthetic test data was removed after verification.
+
+### Part 5: Dataset Reporting and Capacity Assessment
+
+Created `scripts/dataset_report.py` and generated `DATASET.md`.
+
+The report measures:
+- Source inventory and permission status.
+- Manifest records and collection status.
+- Files present and verified.
+- PDF page counts.
+- SHA-256 mismatches and duplicate hashes.
+- Missing files and PDF reading errors.
+
+Created `docs/CAPACITY.md` to document collection throughput, storage considerations, processing capacity, constraints and the 2,000-page target.
+
+#### Current Measured Dataset Baseline
+
+- Source inventory entries: 3.
+- Permission-pending sources: 3.
+- Downloaded corpus documents: 0.
+- PDF pages collected: 0.
+- Target: 2,000 pages.
+- Target progress: 0%.
+
+### Day 6 Status
+
+**Engineering foundation:** Implemented and tested.
+
+**Quality verification:** Full test suite, Ruff, Python compilation and all pre-commit hooks passed.
+
+**Dataset collection:** Not completed; source reuse permission and document verification remain pending.
+
+#### Outstanding Work
+
+- Obtain written reuse permissions.
+- Complete the approved direct-document source inventory.
+- Collect only authorised documents.
+- Work toward the 2,000-page target.
+- Verify document versions, readability and corpus integrity.
+- Complete final Git review, commit, pull request, merge and CI/CD verification.
+
+The corpus target is not marked complete. Public accessibility and sitemap discovery do not constitute reuse permission.

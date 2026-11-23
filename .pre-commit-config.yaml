@@ -1,4 +1,4 @@
-# Runs on every "git commit". If a hook fails, the commit is stopped.
+﻿# Runs on every "git commit". If a hook fails, the commit is stopped.
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -9,6 +9,8 @@ repos:
       - id: check-toml
       - id: check-added-large-files
         args: ["--maxkb=500"]
+        # The append-only download manifest may exceed 500 KB.
+        exclude: ^data/manifest\.jsonl$
       - id: detect-private-key
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.17.4
@@ -20,4 +22,5 @@ repos:
     rev: v1.5.0
     hooks:
       - id: detect-secrets
-        exclude: ^(uv\.lock|migrations/.*)$
+        # SHA-256 fingerprints in the manifest can trigger false positives.
+        exclude: ^(uv\.lock|migrations/.*|data/manifest\.jsonl)$
