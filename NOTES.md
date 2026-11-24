@@ -429,83 +429,138 @@ Implemented:
 
 ### Part 2: Database Storage
 
-Updated `src/nyayasetu/db/models.py`.
+Updated `src/nyayasetu/db/models.py` and created the migration:
 
-Added:
-- `Page.headings` JSONB field for section information.
-- `ParseFailure` model for tracking parsing failures.
-- Unique failure paths and indexed failure reasons.
-- Retry-attempt tracking.
-
-Created migration:
 `f236359a39e6_add_page_headings_and_parse_failures.py`
 
-Applied successfully using Alembic.
+Added:
+- `pages.headings` as a JSONB field.
+- `parse_failures` for recording parsing errors.
+- Failure reason, detail, attempt count and timestamps.
+- Retry tracking and removal of resolved failures after successful parsing.
 
-Created `src/nyayasetu/ingest/store.py`.
+**Neon verification:**
+- Alembic version: `f236359a39e6`.
+- `pages.headings` exists and is non-nullable.
+- `parse_failures` table and its expected columns exist.
 
-Implemented:
-- Parsed document storage.
-- Page-by-page database storage.
-- SHA-256 fingerprinting.
-- Existing document update handling.
-- Parse failure storage and retry tracking.
-- Removal of resolved failures after successful parsing.
+### Part 3: Corpus Collection and Parsing
 
-### Part 3: Corpus Parsing CLI
+The academic project corpus was collected from official NALSA source pages after the project evaluator approved its use for this academic project. This approval is not recorded as an open reuse licence; source licence values remain `Not stated`.
+
+Collected 31 PDF documents.
+
+**Download and integrity verification:**
+- Candidate PDF URLs: 31.
+- Successfully downloaded: 31.
+- Blocked or failed downloads: 0.
+- Verified files: 31.
+- Missing files: 0.
+- SHA-256 mismatches: 0.
+- Unsafe manifest paths: 0.
 
 Created `scripts/parse_corpus.py`.
 
 Implemented:
-- Manifest-based downloaded document discovery.
+- Manifest-based document discovery.
 - Safe project-relative path validation.
 - SHA-256 integrity verification.
 - Parsing and database storage.
-- Dead-letter failure recording.
-- `--limit` processing option.
-- `--retry-failed` retry option.
-- Optional `--ocr` fallback.
+- Failure recording and retry handling.
+- `--limit`, `--retry-failed` and optional `--ocr` arguments.
 
-### Part 4: Parser Comparison
+**Initial parsing:**
+- Total processed: 31.
+- Parsed: 12.
+- Failed: 19.
+- All 19 initial failures were classified as `no_text_layer`.
+
+Installed and verified Tesseract OCR (English language support). Retried the failed documents using:
+
+`uv run python .\scripts\parse_corpus.py --retry-failed --ocr eng`
+
+Retry result:
+- Retried: 19.
+- Parsed successfully: 19.
+- Failed: 0.
+
+### Part 4: Neon Corpus Verification
+
+Verified the parsed NALSA corpus directly in Neon.
+
+| Measurement | Verified result |
+|---|---:|
+| Parsed documents | 31 |
+| Stored pages | 1,943 |
+| Documents with pages | 31 |
+| Pages containing text | 1,839 |
+| Pages with heading data | 1,306 |
+| Remaining NALSA parse failures | 0 |
+
+A per-document SQL check confirmed that all 31 documents have the expected number of stored pages. Page numbering starts at 1 and reaches the expected final page for every document.
+
+Real page records were inspected in the SQL editor, including page text and heading JSON.
+
+Some OCR-extracted pages have empty heading arrays. Heading paths were confirmed in text-based PyMuPDF records; OCR heading detection is not assumed where no heading was extracted.
+
+The empty-page query returned 104 records. Two pages were visually checked against their PDFs and confirmed to be blank. The remaining empty-page records have not all been individually classified. Empty pages are retained to preserve original page numbering.
+
+### Part 5: Parser Comparison
 
 Created `scripts/compare_parsers.py`.
 
 Implemented:
-- Discovery of the largest PDF files.
-- PyMuPDF and pypdf comparison.
-- Extracted page, character, heading and table counts.
-- Parser error reporting.
+- Selection of the largest available PDFs.
+- PyMuPDF and pypdf extraction comparison.
+- Page, character, heading and table counts.
+- Error reporting.
+- Markdown report generation.
 
-Actual comparison remains pending because no approved PDF documents are available.
+Compared the 10 largest corpus PDFs:
 
-### Part 5: Verification
+| PDF | PyMuPDF | pypdf | Manual verdict |
+|---|---|---|---|
+| `1756544763-ddfff673.pdf` | no text layer | no text layer | Inconclusive - OCR required |
+| `1756544777-fea03c6b.pdf` | no text layer | no text layer | Inconclusive - OCR required |
+| `202505142178608-0e5ae2e9.pdf` | no text layer | no text layer | Inconclusive - OCR required |
+| `20250409258379504-8e8276b9.pdf` | no text layer | no text layer | Inconclusive - OCR required |
+| `20250408408064338-3434fcd0.pdf` | no text layer | no text layer | Inconclusive - OCR required |
+| `2025040925439249-c7a90332.pdf` | 131 pages; 146,962 characters; 309 headings; 8 tables | 131 pages; 144,200 characters; 0 headings; 0 tables | PyMuPDF |
+| `202504081834821576-35eb6f80.pdf` | no text layer | no text layer | Inconclusive - OCR required |
+| `202504081540884465-660db624.pdf` | no text layer | no text layer | Inconclusive - OCR required |
+| `2025040866630099-49d08f01.pdf` | no text layer | no text layer | Inconclusive - OCR required |
+| `202504091237499824-db27697c.pdf` | 176 pages; 330,842 characters; 331 headings; 27 tables | 176 pages; 328,438 characters; 0 headings; 0 tables | PyMuPDF |
 
-- Parser unit tests: 9 passed.
-- Complete unit test suite: 36 passed.
-- Ruff check for parser CLI: Passed.
-- Ruff check for comparison script: Passed.
-- Parser CLI help: Passed.
-- Empty-corpus handling: Passed.
-- Parser comparison CLI: Passed with zero available PDFs.
+**Comparison verdict:**
+- Eight scanned PDFs: neither native parser could extract a usable text layer. OCR is required; these results do not establish a winner.
+- Two text-based PDFs: PyMuPDF extracted more text and preserved heading/table structure better than pypdf in the measured results and inspected first-page samples.
+- Preferred native PDF parser: PyMuPDF.
+- OCR remains the fallback for scanned PDFs.
 
-### D07 Status
+The comparison report is generated at `data/parser_comparison.md`.
 
-**Parser implementation:** Completed.
+### Part 6: Testing and Quality Verification
 
-**Database migration:** Applied.
+The parser and comparison implementation were tested.
 
-**Unit testing:** Passed.
+Latest recorded project checks:
+- Ruff lint: passed.
+- Ruff format check: 52 files already formatted.
+- Full test suite: 154 passed, 5 skipped.
+- Parser comparison tests: included in the full test suite.
+- Parser CLI and comparison CLI: executed successfully.
 
-**Real corpus parsing:** Pending authorised documents.
+The optional PySocks dependency warning from urllib3 does not indicate a parser test failure. The PyMuPDF fontTools warning was also observed during comparison; no parser failure was attributed to it.
 
-**Parser comparison:** Implemented; real-document comparison pending.
+### D07 Acceptance Criteria Status
 
-**OCR verification:** Pending scanned PDF availability and Tesseract verification.
+| Acceptance criterion | Status |
+|---|---|
+| Parser implementation merged into `main`; CI green | Verified |
+| Migration adds `parse_failures` and `pages.headings`; applied in Neon | Verified |
+| Entire 31-document corpus represented in `documents` or `parse_failures` | Verified: 31 documents, 0 remaining failures |
+| Page numbers and heading data checked in real SQL records | Verified by SQL spot checks; OCR heading extraction has limitations |
+| 10-file parser comparison table and verdicts documented | Documented above |
+| Failures recorded by reason and at least one fixed | Verified: 19 `no_text_layer` failures resolved through OCR |
 
-### Dataset Limitation
-
-- Approved source documents: 0.
-- Downloaded corpus documents: 0.
-- PDFs available for comparison: 0.
-
-No synthetic test fixtures are counted as collected legal corpus documents. Collection remains dependent on written reuse permission.
+**Overall:** The Day 07 parser, storage migration, corpus processing, OCR recovery and comparison work have been implemented and verified against the recorded results. The OCR heading limitation and unclassified empty-page records remain documented rather than being treated as fully verified.
