@@ -280,3 +280,216 @@ async def test_fetch_all_skips_completed_download(tmp_path):
     assert counts["skipped"] == 1
     assert counts["downloaded"] == 0
     assert requests == []
+
+
+@pytest.mark.asyncio
+async def test_robots_returns_fail_closed_for_server_error():
+    async def handler(request):
+        return httpx.Response(503)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        allowed, delay = await Robots(client).check("https://example.org/file.pdf")
+
+    assert allowed is False
+    assert delay == 0.0
+
+
+@pytest.mark.asyncio
+async def test_robots_treats_missing_robots_as_no_restrictions():
+    async def handler(request):
+        return httpx.Response(404)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        allowed, _ = await Robots(client).check("https://example.org/file.pdf")
+
+    assert allowed is True
+
+
+@pytest.mark.asyncio
+async def test_host_gate_waits_when_host_is_still_throttled(monkeypatch):
+    from nyayasetu.ingest import fetch
+
+    moments = iter([100.0, 100.0, 105.0, 105.0])
+    monkeypatch.setattr(fetch.time, "monotonic", lambda: next(moments, 105.0))
+    pauses = []
+
+    async def fake_sleep(seconds):
+        pauses.append(seconds)
+
+    gate = fetch.HostGate(10.0, fake_sleep)
+    await gate.wait("example.org")
+    await gate.wait("example.org")
+
+    assert pauses == [5.0]
+
+
+@pytest.mark.asyncio
+async def test_download_removes_partial_file_when_size_limit_is_exceeded(tmp_path, monkeypatch):
+    from nyayasetu.ingest import fetch
+
+    monkeypatch.setattr(fetch, "MAX_BYTES", 5)
+
+    async def handler(request):
+        return httpx.Response(
+            200,
+            headers={"Content-Type": "application/pdf"},
+            content=b"123456",
+        )
+
+    source = Source(
+        url="https://example.org/large.pdf",
+        source="Example",
+        licence="CC BY 4.0",
+    )
+    raw_dir = tmp_path / "data" / "raw"
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        with pytest.raises(DownloadError, match="larger than"):
+            await _download(client, source, tmp_path, raw_dir)
+
+    target_dir = raw_dir / "example"
+    assert not list(target_dir.glob("*.part"))
+
+
+@pytest.mark.asyncio
+async def test_fetch_one_returns_blocked_record_for_disallowed_url():
+    import asyncio
+
+    async def handler(request):
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="User-agent: *\nDisallow: /\n")
+        return httpx.Response(200, content=b"document")
+
+    source = Source("https://example.org/file.pdf", "Example", "CC BY 4.0")
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        from nyayasetu.ingest.fetch import HostGate, fetch_one
+
+        result = await fetch_one(
+            client,
+            source,
+            root=__import__("pathlib").Path("."),
+            raw_dir=__import__("pathlib").Path("data/raw"),
+            robots=Robots(client),
+            gate=HostGate(0, asyncio.sleep),
+            slots=asyncio.Semaphore(1),
+            max_attempts=2,
+            sleep=asyncio.sleep,
+        )
+
+    assert result["status"] == "blocked"
+    assert result["error"] == "robots.txt"
+
+
+@pytest.mark.asyncio
+async def test_fetch_one_downloads_permitted_source(tmp_path):
+    import asyncio
+
+    from nyayasetu.ingest.fetch import HostGate, fetch_one
+
+    async def handler(request):
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="User-agent: *\nAllow: /\n")
+        return httpx.Response(
+            200,
+            headers={"Content-Type": "application/pdf"},
+            content=b"legal document",
+        )
+
+    source = Source("https://example.org/file.pdf", "Example", "CC BY 4.0")
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        result = await fetch_one(
+            client,
+            source,
+            root=tmp_path,
+            raw_dir=tmp_path / "data" / "raw",
+            robots=Robots(client),
+            gate=HostGate(0, asyncio.sleep),
+            slots=asyncio.Semaphore(1),
+            max_attempts=2,
+            sleep=asyncio.sleep,
+        )
+
+    assert result["status"] == "downloaded"
+    assert result["attempts"] == 1
+    assert (tmp_path / result["path"]).read_bytes() == b"legal document"
+
+
+@pytest.mark.asyncio
+async def test_fetch_one_stops_retrying_non_retryable_http_error(tmp_path):
+    import asyncio
+
+    from nyayasetu.ingest.fetch import HostGate, fetch_one
+
+    async def handler(request):
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="User-agent: *\nAllow: /\n")
+        return httpx.Response(404)
+
+    source = Source("https://example.org/missing.pdf", "Example", "CC BY 4.0")
+    sleeps = []
+
+    async def fake_sleep(seconds):
+        sleeps.append(seconds)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        result = await fetch_one(
+            client,
+            source,
+            root=tmp_path,
+            raw_dir=tmp_path / "data" / "raw",
+            robots=Robots(client),
+            gate=HostGate(0, fake_sleep),
+            slots=asyncio.Semaphore(1),
+            max_attempts=3,
+            sleep=fake_sleep,
+        )
+
+    assert result["status"] == "failed"
+    assert result["http_status"] == 404
+    assert result["attempts"] == 1
+    assert sleeps == []
+
+
+@pytest.mark.asyncio
+async def test_fetch_one_retries_server_error_then_succeeds(tmp_path, monkeypatch):
+    import asyncio
+
+    from nyayasetu.ingest import fetch
+    from nyayasetu.ingest.fetch import HostGate, fetch_one
+
+    monkeypatch.setattr(fetch, "backoff_delay", lambda attempt: 0.0)
+    requests = []
+
+    async def handler(request):
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="User-agent: *\nAllow: /\n")
+        requests.append(request)
+        if len(requests) == 1:
+            return httpx.Response(503)
+        return httpx.Response(200, content=b"recovered")
+
+    source = Source("https://example.org/file.pdf", "Example", "CC BY 4.0")
+    sleeps = []
+
+    async def fake_sleep(seconds):
+        sleeps.append(seconds)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        result = await fetch_one(
+            client,
+            source,
+            root=tmp_path,
+            raw_dir=tmp_path / "data" / "raw",
+            robots=Robots(client),
+            gate=HostGate(0, fake_sleep),
+            slots=asyncio.Semaphore(1),
+            max_attempts=2,
+            sleep=fake_sleep,
+        )
+
+    assert result["status"] == "downloaded"
+    assert result["attempts"] == 2
+    assert len(requests) == 2
+    assert len(sleeps) == 1
