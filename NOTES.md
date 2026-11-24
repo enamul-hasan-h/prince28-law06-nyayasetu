@@ -408,3 +408,104 @@ Created `docs/CAPACITY.md` to document collection throughput, storage considerat
 - Complete final Git review, commit, pull request, merge and CI/CD verification.
 
 The corpus target is not marked complete. Public accessibility and sitemap discovery do not constitute reuse permission.
+
+## D07 – Document Parsing and Storage
+
+### Part 1: Parser Implementation
+
+Created `src/nyayasetu/ingest/parse.py`.
+
+Implemented:
+- PDF text extraction using PyMuPDF.
+- Alternative PDF extraction using pypdf.
+- Optional OCR fallback using Tesseract.
+- HTML content extraction using Trafilatura.
+- Text, Markdown, RST and AsciiDoc parsing.
+- CSV, JSON, YAML and XML data-file handling.
+- Text cleaning and repeated-line removal.
+- Page splitting and page-number preservation.
+- Heading detection and section-path tracking.
+- Markdown table extraction where supported.
+
+### Part 2: Database Storage
+
+Updated `src/nyayasetu/db/models.py`.
+
+Added:
+- `Page.headings` JSONB field for section information.
+- `ParseFailure` model for tracking parsing failures.
+- Unique failure paths and indexed failure reasons.
+- Retry-attempt tracking.
+
+Created migration:
+`f236359a39e6_add_page_headings_and_parse_failures.py`
+
+Applied successfully using Alembic.
+
+Created `src/nyayasetu/ingest/store.py`.
+
+Implemented:
+- Parsed document storage.
+- Page-by-page database storage.
+- SHA-256 fingerprinting.
+- Existing document update handling.
+- Parse failure storage and retry tracking.
+- Removal of resolved failures after successful parsing.
+
+### Part 3: Corpus Parsing CLI
+
+Created `scripts/parse_corpus.py`.
+
+Implemented:
+- Manifest-based downloaded document discovery.
+- Safe project-relative path validation.
+- SHA-256 integrity verification.
+- Parsing and database storage.
+- Dead-letter failure recording.
+- `--limit` processing option.
+- `--retry-failed` retry option.
+- Optional `--ocr` fallback.
+
+### Part 4: Parser Comparison
+
+Created `scripts/compare_parsers.py`.
+
+Implemented:
+- Discovery of the largest PDF files.
+- PyMuPDF and pypdf comparison.
+- Extracted page, character, heading and table counts.
+- Parser error reporting.
+
+Actual comparison remains pending because no approved PDF documents are available.
+
+### Part 5: Verification
+
+- Parser unit tests: 9 passed.
+- Complete unit test suite: 36 passed.
+- Ruff check for parser CLI: Passed.
+- Ruff check for comparison script: Passed.
+- Parser CLI help: Passed.
+- Empty-corpus handling: Passed.
+- Parser comparison CLI: Passed with zero available PDFs.
+
+### D07 Status
+
+**Parser implementation:** Completed.
+
+**Database migration:** Applied.
+
+**Unit testing:** Passed.
+
+**Real corpus parsing:** Pending authorised documents.
+
+**Parser comparison:** Implemented; real-document comparison pending.
+
+**OCR verification:** Pending scanned PDF availability and Tesseract verification.
+
+### Dataset Limitation
+
+- Approved source documents: 0.
+- Downloaded corpus documents: 0.
+- PDFs available for comparison: 0.
+
+No synthetic test fixtures are counted as collected legal corpus documents. Collection remains dependent on written reuse permission.
