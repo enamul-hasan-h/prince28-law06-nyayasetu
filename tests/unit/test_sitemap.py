@@ -148,3 +148,130 @@ async def test_robots_failure_stops_discovery():
                 client=client,
                 delay=0,
             )
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "ftp://example.org/sitemap.xml",
+        "https://{}:{}@example.org/sitemap.xml".format("user", "pass"),
+        "https:///sitemap.xml",
+    ],
+)
+@pytest.mark.asyncio
+async def test_rejects_unsafe_sitemap_urls(url):
+    with pytest.raises(SitemapError, match="valid HTTP"):
+        await discover_sitemap(url)
+
+
+@pytest.mark.parametrize(
+    "options",
+    [
+        {"delay": -1},
+        {"max_sitemaps": 0},
+        {"limit": 0},
+    ],
+)
+@pytest.mark.asyncio
+async def test_rejects_invalid_discovery_limits(options):
+    with pytest.raises(SitemapError, match="Invalid discovery limits"):
+        await discover_sitemap("https://example.org/sitemap.xml", **options)
+
+
+@pytest.mark.asyncio
+async def test_rejects_unsupported_sitemap_root():
+    async def handler(request):
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="User-agent: *\nAllow: /\n")
+        return httpx.Response(200, text="<feed><entry /></feed>")
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        with pytest.raises(SitemapError, match="Unsupported sitemap root"):
+            await discover_sitemap(
+                "https://example.org/sitemap.xml",
+                client=client,
+                delay=0,
+            )
+
+
+@pytest.mark.asyncio
+async def test_wraps_http_errors_as_sitemap_errors():
+    async def handler(request):
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="User-agent: *\nAllow: /\n")
+        return httpx.Response(404)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        with pytest.raises(SitemapError, match="Could not retrieve sitemap"):
+            await discover_sitemap(
+                "https://example.org/sitemap.xml",
+                client=client,
+                delay=0,
+            )
+
+
+@pytest.mark.asyncio
+async def test_sitemap_index_respects_max_sitemaps_limit():
+    index = """<sitemapindex>
+        <sitemap><loc>https://example.org/part.xml</loc></sitemap>
+    </sitemapindex>"""
+
+    async def handler(request):
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="User-agent: *\nAllow: /\n")
+        return httpx.Response(200, text=index)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        with pytest.raises(SitemapError, match="Sitemap limit reached"):
+            await discover_sitemap(
+                "https://example.org/sitemap.xml",
+                client=client,
+                delay=0,
+                max_sitemaps=1,
+            )
+
+
+@pytest.mark.asyncio
+async def test_sitemap_skips_invalid_and_duplicate_locations():
+    sitemap = """<urlset>
+        <url><loc>not-a-url</loc></url>
+        <url><loc>https://example.org/act.pdf</loc></url>
+        <url><loc>https://example.org/act.pdf</loc></url>
+    </urlset>"""
+
+    async def handler(request):
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="User-agent: *\nAllow: /\n")
+        return httpx.Response(200, text=sitemap)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        result = await discover_sitemap(
+            "https://example.org/sitemap.xml",
+            client=client,
+            delay=0,
+        )
+
+    assert result == ["https://example.org/act.pdf"]
+
+
+@pytest.mark.asyncio
+async def test_sitemap_stops_when_candidate_limit_is_reached():
+    sitemap = """<urlset>
+        <url><loc>https://example.org/one.pdf</loc></url>
+        <url><loc>https://example.org/two.pdf</loc></url>
+    </urlset>"""
+
+    async def handler(request):
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="User-agent: *\nAllow: /\n")
+        return httpx.Response(200, text=sitemap)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        result = await discover_sitemap(
+            "https://example.org/sitemap.xml",
+            client=client,
+            delay=0,
+            limit=1,
+        )
+
+    assert result == ["https://example.org/one.pdf"]
