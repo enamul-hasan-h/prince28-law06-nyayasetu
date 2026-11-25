@@ -43,7 +43,6 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
             )
         finally:
             duration_ms = round((time.perf_counter() - start) * 1000, 2)
-            request_id_ctx.reset(token)
 
         response.headers["X-Request-ID"] = request_id
         logger.info(
@@ -55,4 +54,5 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
                 "duration_ms": duration_ms,
             },
         )
+        request_id_ctx.reset(token)
         return response
