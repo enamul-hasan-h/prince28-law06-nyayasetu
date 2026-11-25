@@ -46,8 +46,8 @@ def main() -> int:
 
     asyncio.run(reset_test_database(admin_url))
 
+    os.environ["DATABASE_URL"] = test_url
     environment = os.environ.copy()
-    environment["DATABASE_URL"] = test_url
 
     migration = subprocess.run(
         [sys.executable, "-m", "alembic", "upgrade", "head"],
