@@ -8,30 +8,30 @@
 | Metric | Count |
 |---|---:|
 | Source inventory entries | 3 |
-| Sources marked permission pending | 3 |
-| Manifest records | 0 |
-| Downloaded manifest records | 0 |
-| Files verified on disk | 0 |
-| Files physically present under `data/raw/` | 0 |
-| PDF files under `data/raw/` | 0 |
-| PDF files referenced by downloaded records | 0 |
-| PDF pages readable | 0 |
+| Sources marked permission pending | 0 |
+| Manifest records | 31 |
+| Downloaded manifest records | 31 |
+| Files verified on disk | 31 |
+| Files physically present under `data/raw/` | 31 |
+| PDF files under `data/raw/` | 31 |
+| PDF files referenced by downloaded records | 31 |
+| PDF pages readable | 1943 |
 | Page target | 2000 |
-| Progress toward page target | 0/2000 |
+| Progress toward page target | 1943/2000 |
 
 ## Manifest status breakdown
 
 | Status | Records |
 |---|---:|
-| No records | 0 |
+| downloaded | 31 |
 
 ## Source inventory
 
 | Source | Title | Licence / permission status |
 |---|---|---|
-| NALSA | Official scheme index | Permission pending |
-| NALSA | Official NALSA FAQs | Permission pending |
-| NALSA | Legal Services Authorities Act 1987 | Permission pending |
+| NALSA | Official scheme index | Not stated |
+| NALSA | Official NALSA FAQs | Not stated |
+| NALSA | Legal Services Authorities Act 1987 | Not stated |
 
 ## Integrity checks
 

@@ -285,11 +285,12 @@ Created a provisional inventory of 10 NALSA legal-service schemes.
 Reviewed official NALSA source pages and website reuse policies.
 
 Research findings:
-- Three official NALSA page references recorded in `data/sources.csv`.
-- All three sources remain marked `Permission pending`.
-- Reuse permission must be clarified before automated collection or reproduction.
-- Research reference PDFs are kept outside the active corpus and excluded from Git.
-- No legal documents have been approved for active corpus inclusion.
+- Three official NALSA page references are recorded in `data/sources.csv`.
+- All three source inventory entries currently record their licence status as `Not stated`.
+- Evaluator approval for academic-project use of the collected NALSA material is recorded in the project notes. This approval is not an open reuse licence or unrestricted redistribution permission.
+- The active corpus contains 31 downloaded NALSA PDFs, with 1,943 readable pages verified in `DATASET.md`.
+- Research reference PDFs remain separate from the active corpus and are excluded from corpus totals and Git.
+- Source-specific restrictions and third-party rights must continue to be respected.
 
 ### Part 2: URL, Git Repository and Manual Downloader
 
