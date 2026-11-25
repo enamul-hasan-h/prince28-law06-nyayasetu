@@ -287,8 +287,7 @@ Reviewed official NALSA source pages and website reuse policies.
 Research findings:
 - Three official NALSA page references are recorded in `data/sources.csv`.
 - All three source inventory entries currently record their licence status as `Not stated`.
-- Evaluator approval for academic-project use of the collected NALSA material is recorded in the project notes. This approval is not an open reuse licence or unrestricted redistribution permission.
-- The active corpus contains 31 downloaded NALSA PDFs, with 1,943 readable pages verified in `DATASET.md`.
+- The active corpus contains 31 downloaded NALSA PDFs, with 1,943 PDF pages counted and verified in `DATASET.md`.
 - Research reference PDFs remain separate from the active corpus and are excluded from corpus totals and Git.
 - Source-specific restrictions and third-party rights must continue to be respected.
 
@@ -343,7 +342,7 @@ Created and extended unit tests for downloader, repository CLI, manual collectio
 - Fetch module tests: 19 passed.
 - Sitemap tests: 7 passed.
 - CLI tests: 17 passed.
-- Full project test suite: 60 passed, 3 skipped.
+- Full project test suite: 155 passed, 5 skipped.
 - Ruff lint: All checks passed.
 - Python compilation checks: Passed.
 - Pre-commit hooks: All 9 passed.
@@ -384,12 +383,12 @@ Created `docs/CAPACITY.md` to document collection throughput, storage considerat
 
 #### Current Measured Dataset Baseline
 
-- Source inventory entries: 3.
-- Permission-pending sources: 3.
-- Downloaded corpus documents: 0.
-- PDF pages collected: 0.
+- Source inventory entries: 3; all record licence status as `Not stated`.
+- Downloaded corpus documents: 31.
+- PDF pages counted: 1,943.
 - Target: 2,000 pages.
-- Target progress: 0%.
+- Target progress: 1,943/2,000 (97.15%); 57 pages short.
+- Integrity checks: 0 missing files, 0 SHA-256 mismatches, 0 duplicate hashes and 0 PDF reading errors.
 
 ### Day 6 Status
 
@@ -397,15 +396,14 @@ Created `docs/CAPACITY.md` to document collection throughput, storage considerat
 
 **Quality verification:** Full test suite, Ruff, Python compilation and all pre-commit hooks passed.
 
-**Dataset collection:** Not completed; source reuse permission and document verification remain pending.
+**Dataset collection:** 31 PDFs downloaded and locally verified; the 2,000-page target remains 57 pages short.
 
 #### Outstanding Work
 
-- Obtain written reuse permissions.
-- Complete the approved direct-document source inventory.
-- Collect only authorised documents.
-- Work toward the 2,000-page target.
-- Verify document versions, readability and corpus integrity.
+- Verify document versions and currentness.
+- Continue assessing applicable reuse terms; the recorded licence status remains `Not stated`.
+- Address the remaining 57-page gap only with eligible, appropriately sourced documents.
+- Continue monitoring searchable-text coverage and OCR needs separately from PDF page counts.
 - Complete final Git review, commit, pull request, merge and CI/CD verification.
 
 The corpus target is not marked complete. Public accessibility and sitemap discovery do not constitute reuse permission.

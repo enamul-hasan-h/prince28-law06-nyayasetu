@@ -127,9 +127,12 @@ def build_report(root: Path, full_pages_target: int) -> str:
         f"| Files physically present under `data/raw/` | {len(raw_files)} |",
         f"| PDF files under `data/raw/` | {raw_pdf_count} |",
         f"| PDF files referenced by downloaded records | {pdf_count} |",
-        f"| PDF pages readable | {total_pages} |",
+        f"| PDF pages counted | {total_pages} |",
         f"| Page target | {full_pages_target} |",
         f"| Progress toward page target | {total_pages}/{full_pages_target} |",
+        "",
+        "> Page count reflects PDF page objects that could be read. "
+        "It does not measure searchable-text coverage or OCR completeness.",
         "",
         "## Manifest status breakdown",
         "",

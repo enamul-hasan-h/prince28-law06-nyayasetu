@@ -22,11 +22,11 @@
 
 **- Selection: Provisional list prepared**
 
-**- Document verification: In progress**
+**- Local document verification: Complete for all 10 selected PDFs; files opened and page counts checked**
 
-**- Download permission: Pending**
+**- Collection status: Collected for project research; explicit rights-holder reuse licence not stated**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -100,13 +100,13 @@
 
 **- Relevance to NyayaSetu: High**
 
-**- Version verification: Pending**
+**- Version verification: Pending; currentness must be checked against the official NALSA source**
 
-**- Reuse permission: Pending**
+**- Reuse licence: Not stated in the source inventory; no separate rights-holder reuse licence is recorded**
 
-**- Local download: No**
+**- Local download: Yes; manifest status and file presence verified**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -120,7 +120,7 @@
 
 **- Official PDF: https://cdnbbsr.s3waas.gov.in/s32e45f93088c7db59767efef516b306aa/uploads/2025/04/202504081255775595.pdf**
 
-**- Page count: 12**
+**- Page count: 15 (verified from local PDF)**
 
 **- Title check: Confirmed from supplied document text**
 
@@ -130,11 +130,11 @@
 
 **- Important coverage: Interim compensation, final compensation, rehabilitation and victim eligibility**
 
-**- Reuse permission: Pending**
+**- Reuse licence: Not stated in the source inventory; no separate rights-holder reuse licence is recorded**
 
-**- Local download: No**
+**- Local download: Yes; manifest status and file presence verified**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -154,17 +154,17 @@
 
 **- Page count check: Confirmed from supplied page numbering**
 
-**- Version/date verification: Pending**
+**- Version/date verification: Pending; currentness must be checked against the official NALSA source**
 
 **- Relevance to NyayaSetu: High**
 
 **- Important coverage: Disaster relief coordination, legal aid, relief camps, healthcare, document reconstruction, insurance claims, debt relief and rehabilitation**
 
-**- Reuse permission: Pending**
+**- Reuse licence: Not stated in the source inventory; no separate rights-holder reuse licence is recorded**
 
-**- Local download: No**
+**- Local download: Yes; manifest status and file presence verified**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -184,17 +184,17 @@
 
 **- Page count check: Confirmed by user**
 
-**- Version/date verification: Pending**
+**- Version/date verification: Pending; currentness must be checked against the official NALSA source**
 
 **- Relevance to NyayaSetu: High**
 
 **- Important coverage: Prevention, rescue, legal aid, victim compensation, rehabilitation, government entitlements and three-year case follow-up**
 
-**- Reuse permission: Pending**
+**- Reuse licence: Not stated in the source inventory; no separate rights-holder reuse licence is recorded**
 
-**- Local download: No**
+**- Local download: Yes; manifest status and file presence verified**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -214,17 +214,17 @@
 
 **- Page count check: Confirmed by user**
 
-**- Version/date verification: Pending**
+**- Version/date verification: Pending; currentness must be checked against the official NALSA source**
 
 **- Relevance to NyayaSetu: Very High**
 
 **- Important coverage: Child-friendly legal aid, LSUC structure, children in conflict with law, children in need of care and protection, disability-inclusive services, specialised lawyers and PLVs, monitoring and reporting**
 
-**- Reuse permission: Pending**
+**- Reuse licence: Not stated in the source inventory; no separate rights-holder reuse licence is recorded**
 
-**- Local download: No**
+**- Local download: Yes; manifest status and file presence verified**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -246,17 +246,17 @@
 
 **- Page count check: Confirmed by user**
 
-**- Version/date verification: Pending**
+**- Version/date verification: Pending; currentness must be checked against the official NALSA source**
 
 **- Relevance to NyayaSetu: Very High**
 
 **- Important coverage: Manonyay legal services units, mental health legal aid clinics, disability rights, legal capacity, guardianship, community living, welfare entitlements and institutional support**
 
-**- Reuse permission: Pending**
+**- Reuse licence: Not stated in the source inventory; no separate rights-holder reuse licence is recorded**
 
-**- Local download: No**
+**- Local download: Yes; manifest status and file presence verified**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -276,17 +276,17 @@
 
 **- Page count check: Confirmed by user**
 
-**- Version/date verification: Pending**
+**- Version/date verification: Pending; currentness must be checked against the official NALSA source**
 
 **- Relevance to NyayaSetu: High**
 
 **- Important coverage: Senior citizens' legal aid, maintenance rights, welfare entitlements, Legal Services Clinics, PLV support, home visits and awareness programmes**
 
-**- Reuse permission: Pending**
+**- Reuse licence: Not stated in the source inventory; no separate rights-holder reuse licence is recorded**
 
-**- Local download: No**
+**- Local download: Yes; manifest status and file presence verified**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -306,17 +306,17 @@
 
 **- Page count check: Confirmed by user**
 
-**- Version/date verification: Pending**
+**- Version/date verification: Pending; currentness must be checked against the official NALSA source**
 
 **- Relevance to NyayaSetu: High**
 
 **- Important coverage: Acid attack survivors' legal aid, compensation, medical treatment, hospital legal services clinics, counselling and rehabilitation**
 
-**- Reuse permission: Pending**
+**- Reuse licence: Not stated in the source inventory; no separate rights-holder reuse licence is recorded**
 
-**- Local download: No**
+**- Local download: Yes; manifest status and file presence verified**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -336,17 +336,17 @@
 
 **- Page count check: Confirmed by user**
 
-**- Version/date verification: Pending**
+**- Version/date verification: Pending; currentness must be checked against the official NALSA source**
 
 **- Relevance to NyayaSetu: Very High**
 
 **- Important coverage: Welfare scheme mapping, poverty alleviation entitlements, Legal Services Officers, PLV assistance, grievance escalation and six-monthly monitoring**
 
-**- Reuse permission: Pending**
+**- Reuse licence: Not stated in the source inventory; no separate rights-holder reuse licence is recorded**
 
-**- Local download: No**
+**- Local download: Yes; manifest status and file presence verified**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -366,17 +366,17 @@
 
 **- Page count check: Confirmed by user**
 
-**- Version/date verification: Pending**
+**- Version/date verification: Pending; currentness must be checked against the official NALSA source**
 
 **- Relevance to NyayaSetu: Very High**
 
 **- Important coverage: PLV selection and empanelment, training, duties, legal awareness, legal aid referrals, victim support, ADR and Lok Adalat awareness, legal aid clinics, honorarium, mentoring, reporting and monitoring**
 
-**- Reuse permission: Pending**
+**- Reuse licence: Not stated in the source inventory; no separate rights-holder reuse licence is recorded**
 
-**- Local download: No**
+**- Local download: Yes; manifest status and file presence verified**
 
-**- Active corpus inclusion: Not approved**
+**- Corpus status: Local files verified; rights and version checks remain subject to verification**
 
 
 
@@ -388,8 +388,8 @@
 
 
 
-**- Schemes 1–10: Initial document verification recorded; version/currentness checks pending.**
+**- Schemes 1-10: All 10 PDFs verified locally; 223 total pages; version/currentness checks remain pending.**
 
-**- Reuse permission: Pending for all schemes.**
+**- Reuse licence: Not stated for all 10 schemes; no separate rights-holder licence is recorded.**
 
-**- Active corpus inclusion: Not approved.**
+**- Verification note: Verify version/currentness and applicable reuse terms before redistribution.**

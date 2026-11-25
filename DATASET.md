@@ -15,9 +15,11 @@
 | Files physically present under `data/raw/` | 31 |
 | PDF files under `data/raw/` | 31 |
 | PDF files referenced by downloaded records | 31 |
-| PDF pages readable | 1943 |
+| PDF pages counted | 1943 |
 | Page target | 2000 |
 | Progress toward page target | 1943/2000 |
+
+> Page count reflects PDF page objects that could be read. It does not measure searchable-text coverage or OCR completeness.
 
 ## Manifest status breakdown
 
