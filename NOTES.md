@@ -746,3 +746,147 @@ Date: 2026-11-25
 - Pricing caveat: gemini-3.6-flash is missing from PRICES_USD, so its successful call was recorded at Rs 0.000000. The reconciled total may therefore understate actual estimated usage cost.
 
 Assessment: Usage endpoint and Neon database aggregates reconciled successfully. Costs are recorded list-price estimates, not a verified provider invoice.
+
+
+## Day 08 - Step 6: Final release and live verification
+
+### Verified model configuration
+
+- Primary provider: Gemini.
+- Primary model tested: `gemini-3.6-flash`.
+- Fallback provider: Groq.
+- Fallback model: `openai/gpt-oss-20b`.
+- The local `.env` explicitly configures `LLM_PRIMARY_MODEL=gemini-3.6-flash`.
+- API keys are configured in the Render service environment and are not documented here.
+
+### Laptop streaming measurement
+
+| Metric | Result |
+|---|---:|
+| Primary model | gemini-3.6-flash |
+| Input tokens | 199 |
+| Output tokens | 152 |
+| First-token latency | 23.99 s |
+| Total latency | 25.61 s |
+| Fallback | No |
+
+### Live Render streaming measurements
+
+Public endpoint: `https://nyayasetu-9ck6.onrender.com`
+
+Question: Who is entitled to free legal services under Section 12?
+
+| Metric | First request | Second awake request |
+|---|---:|---:|
+| Provider/model | Gemini / gemini-3.6-flash | Gemini / gemini-3.6-flash |
+| First-word latency | 34.83 s | 10.65 s |
+| Total latency | 36.26 s | 11.10 s |
+| Input tokens | 199 | 199 |
+| Output tokens | 150 | 151 |
+| Fallback | No | No |
+
+Both public requests returned streamed answers successfully. The second request was measured while the Render service was already awake.
+
+### English and Tamil token comparison
+
+| Test | Total input tokens | Provider |
+|---|---:|---|
+| Hi baseline | 187 | Gemini |
+| English refund question | 195 | Gemini |
+| Tamil refund question | 271 | Groq fallback |
+
+- English message tokens: 195 - 187 = 8.
+- Tamil message tokens: 271 - 187 = 84.
+- Observed ratio: 84 / 8 = 10.5x.
+- Limitation: the Tamil request used Groq fallback, so differences in provider tokenization and request overhead affect this comparison.
+
+### Unknown and off-topic question tests
+
+- Unknown question: "When is the next Lok Adalat in Villupuram?"
+- Exact response: "I'm not sure."
+- Assessment: the assistant acknowledged that it did not know.
+
+- Off-topic question: "Who won the 2011 Cricket World Cup?"
+- Result: the assistant declined to answer because the question was outside NyayaSetu's legal-information scope.
+- Assessment: scope refusal worked.
+
+### Known-answer hallucination tests
+
+1. Section 12 eligibility:
+   - Question: Which categories are eligible for free legal services under Section 12?
+   - Incorrect result: the answer was vague and incomplete and presented types of legal disputes as eligibility categories.
+   - Correct assessment: Section 12 eligibility is based on the statutory categories of persons, not merely the type of legal dispute.
+
+2. Lok Adalat award:
+   - Question: What is the legal effect of a Lok Adalat award, and can it be appealed?
+   - Incorrect detail: the assistant suggested filing a regular civil suit within 30 days.
+   - Correction: a regular civil suit as a general challenge route is unsupported and misleading. A writ challenge may be available in appropriate circumstances.
+
+### Primary-provider failure, fallback and circuit breaker
+
+- During controlled failure testing, the primary Gemini model was temporarily changed to an invalid model name.
+- Requests 1-3 received Gemini HTTP 404 errors and were answered through Groq fallback.
+- Request 4 skipped Gemini because the circuit breaker was open and used Groq directly.
+- Groq fallback total latencies recorded across the four requests were 4.60 s, 3.75 s, 3.66 s and 3.27 s.
+- After the cooldown, the half-open retry attempted Gemini. Gemini returned HTTP 404 and Groq handled the request. Recorded first-word latency was 3.21 s and total latency was 3.57 s.
+- The primary model was restored to `gemini-3.6-flash`.
+- An initial application request encountered a Gemini ReadTimeout and succeeded through Groq fallback.
+- A direct Gemini ping then returned HTTP 200, and a subsequent NyayaSetu application request succeeded through Gemini without fallback.
+
+Assessment: fallback, circuit opening, primary-provider skipping, half-open retry and recovery were verified.
+
+### Usage endpoint and Neon reconciliation
+
+Local usage on 25 November 2026:
+
+| Metric | Value |
+|---|---:|
+| Provider calls | 44 |
+| Errors | 18 |
+| Fallback calls | 19 |
+| Input tokens | 5,912 |
+| Output tokens | 9,683 |
+| Reported cost | Rs 0.2953 |
+
+Neon database totals matched the local usage endpoint.
+
+Live Render usage on 26 November 2026:
+
+| Metric | Value |
+|---|---:|
+| Provider calls | 2 |
+| Errors | 0 |
+| Fallback calls | 0 |
+| Input tokens | 398 |
+| Output tokens | 301 |
+| Reported cost | Rs 0 |
+
+Live cumulative usage at verification:
+
+- Total provider calls: 46.
+- Total input tokens: 6,310.
+- Total output tokens: 9,984.
+- Total reported cost: Rs 0.2953.
+
+The 25 November recorded cost divided by 26 successful requests is approximately Rs 0.01136 per answered request. This recorded estimate is below the Day 1 target of Rs 0.50.
+
+Pricing limitation: `gemini-3.6-flash` is absent from `PRICES_USD`. Successful Gemini calls were therefore recorded at Rs 0.000000. The reported total and average cost may understate actual usage cost. These figures are estimates, not provider invoices. The Day 1 cost target cannot be conclusively validated until the missing model price is configured.
+
+### Issue encountered and resolution
+
+Gemini generation initially returned HTTP 503 during high-demand periods. Groq remained available and successfully handled fallback requests. Later, the configured `gemini-3.6-flash` model passed a direct provider ping and a NyayaSetu application-level request. The primary provider was restored and verified. The missing Gemini pricing entry remains a documented limitation.
+
+### Day 08 release verification status
+
+| Acceptance criterion | Status |
+|---|---|
+| Gateway and prompt included in repository | Verified locally |
+| `llm_calls` migration applied in Neon | Verified |
+| Local streaming chat endpoint | Verified |
+| Local usage endpoint and Neon reconciliation | Verified |
+| Fallback and circuit-breaker behavior | Verified |
+| Public Render chat streaming | Verified: 2 requests |
+| Public Render usage tracking | Verified |
+| Final timings, token comparison and hallucination tests documented | Documented in this report |
+| Git secret scan and final branch checks | Pending |
+| Remote CI, PR and merge to main | Pending |
