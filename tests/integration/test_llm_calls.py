@@ -1,5 +1,6 @@
 """llm_calls: every model call is written to a real Postgres and added up per day."""
 
+import pytest
 from sqlalchemy import func, select
 
 from nyayasetu.config import Settings
@@ -9,6 +10,7 @@ from nyayasetu.db.session import make_engine, make_sessionmaker
 from nyayasetu.llm.gateway import FakeLLM, LLMError, LLMGateway
 
 
+@pytest.mark.integration
 async def test_gateway_calls_are_recorded_and_summed_per_day(database_url):
     engine = make_engine(Settings(app_env="ci", database_url=database_url, _env_file=None))
     sessionmaker = make_sessionmaker(engine)
