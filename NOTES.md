@@ -563,3 +563,98 @@ The optional PySocks dependency warning from urllib3 does not indicate a parser 
 | Failures recorded by reason and at least one fixed | Verified: 19 `no_text_layer` failures resolved through OCR |
 
 **Overall:** The Day 07 parser, storage migration, corpus processing, OCR recovery and comparison work have been implemented and verified against the recorded results. The OCR heading limitation and unclassified empty-page records remain documented rather than being treated as fully verified.
+
+### Gemini provider diagnostics — 25 Nov 2026
+
+- Gemini API model listing: HTTP 200.
+- Configured model: gemini-3.8-flash.
+- OpenAI-compatible Chat Completions: HTTP 503 (high demand).
+- Interactions API: HTTP 503 (high demand).
+- Alternative gemini-2.5-flash: HTTP 404 (no longer available to new users).
+- Groq openai/gpt-oss-20b: successful pong response.
+- Diagnosis: Gemini generation unavailable during testing despite successful API authentication and model discovery.
+- Decision: retain Gemini as primary and Groq as fallback; investigate again later. No gateway migration to Interactions API.
+
+
+### Additional Gemini model tests — 25 Nov 2026
+
+- gemini-3.7-flash: HTTP 503, high demand.
+- gemini-4-carbon: HTTP 429, free-tier generation quota limit is zero.
+- gemini-4-neon: HTTP 429, free-tier generation quota limit is zero.
+- Groq openai/gpt-oss-20b: successful response.
+- Decision: retain gemini-3.8-flash as configured primary and Groq as fallback. Stop model-version experiments for now.
+
+## D08 — Give NyayaSetu a voice, a backup and a bill
+### 25 November 2026
+
+#### Provider comparison
+
+Direct provider ping tests:
+
+| Provider | Model | Input tokens | Output tokens | Latency | Result |
+|---|---|---:|---:|---:|---|
+| Gemini | gemini-3.6-flash | 8 | 1 | 1,617 ms | PASS |
+| Groq | openai/gpt-oss-20b | 78 | 40 | 511 ms | PASS |
+
+Both providers returned the expected `pong` response. Token counts are provider-reported and may differ due to tokenization and request overhead.
+
+#### Model selection and diagnostics
+
+- Earlier Gemini models returned HTTP 503 or HTTP 429 errors during testing.
+- `gemini-3.6-flash` successfully completed the direct ping and live chat tests.
+- The local `.env` uses `gemini-3.6-flash` as the primary model; Groq remains the fallback.
+- The configured pricing table does not contain a price entry for `gemini-3.6-flash`.
+- Consequently, its displayed cost is Rs 0.000000. This is a missing pricing entry, not evidence that the model is free.
+- No unverified price was added.
+
+#### Live chat measurements
+
+Live local API tests using Gemini 3.6 Flash:
+
+| Mode | Input tokens | Output tokens | First-token latency | Total latency |
+|---|---:|---:|---:|---:|
+| Streaming | 199 | 152 | 23.99 s | 25.61 s |
+| Non-streaming | 199 | 156 | N/A | 12.57 s |
+
+Both streaming and non-streaming requests returned answers successfully. Streaming latency exceeded the 1.5-second target and is recorded for follow-up rather than treated as meeting the target.
+
+#### Fallback and circuit-breaker verification
+
+A local FakeLLM simulation demonstrated:
+
+- Three consecutive Gemini failures caused fallback to Groq.
+- The Gemini circuit entered the open state after three failures.
+- A subsequent request skipped Gemini while its circuit was open.
+- After advancing the simulated clock by 31 seconds, Gemini was retried successfully and the circuit returned to closed.
+
+This was a local simulation using fake providers and a simulated clock, not a live provider outage.
+
+#### Usage tracking
+
+- `llm_calls` migration applied and verified in Neon.
+- Local `/v1/usage` endpoint returned daily calls, errors, fallbacks, token totals and cost.
+- The observed usage response included three integration-test records and two live Gemini requests; these are not five live provider requests.
+
+#### Testing and quality checks
+
+- Gateway unit tests: 19 passed.
+- LLM calls integration test: 1 passed.
+- Chat API tests: 7 passed.
+- Full project test suite: 182 passed, 5 skipped.
+- Ruff lint: passed.
+- Ruff format check: 63 files already formatted.
+- `git diff --check`: passed.
+
+#### Day 08 acceptance status
+
+| Acceptance criterion | Current status |
+|---|---|
+| Gateway and system prompt on main; CI green | Pending merge and CI verification |
+| `llm_calls` migration applied in Neon | Verified |
+| Live `POST /v1/chat` streaming response | Verified locally |
+| `/v1/usage` reports calls, tokens and rupees | Verified locally |
+| Fallback and circuit-open behavior demonstrated | Verified locally with FakeLLM |
+| Day 08 timings, token comparison and model issue documented | Documented above |
+| No API key committed; `.env.example` has empty key values | Requires final Git/security verification |
+
+**Overall:** Local implementation, tests, migration and endpoint behavior have been verified. Remote CI, deployment, live Render endpoint checks, Git security verification and merge to `main` remain pending.
