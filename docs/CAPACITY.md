@@ -16,7 +16,7 @@ The figures below are based on the regenerated `DATASET.md`.
 | Downloaded manifest records | 31 |
 | Files verified on disk | 31 |
 | PDF files under data/raw/ | 31 |
-| Readable PDF pages | 1,943 |
+| PDF pages counted | 1,943 |
 | Target PDF pages | 2,000 |
 | Target completion | 97.15% |
 | Pages remaining | 57 |
@@ -27,11 +27,11 @@ The 31 downloaded PDFs passed the reported integrity checks:
 - Duplicate SHA-256 values: 0
 - PDF page-reading errors: 0
 
-The project notes record evaluator approval for academic-project use of the collected NALSA material. This approval must not be represented as an open reuse licence. The source inventory currently records the licence status as `Not stated`.
+The source inventory currently records the licence status as `Not stated`. This status must not be represented as an open reuse licence.
 
 ## 2. Can the current corpus support the target?
 
-The current corpus contains 31 verified PDF files and 1,943 readable pages.
+The current corpus contains 31 verified PDF files and 1,943 PDF pages counted.
 
 It has not yet reached the 2,000-page target. A further 57 readable pages are required.
 
@@ -39,15 +39,16 @@ Only verified PDF pages should contribute to this target. Sitemap candidates, pu
 
 ## 3. Storage capacity
 
-The current dataset report verifies the presence of 31 files, but does not provide a complete storage-capacity assessment.
+Measured storage for the 31 downloaded PDFs is:
 
-Further measurements are required for:
-- Total downloaded file size.
-- Average document size.
-- Storage used by extracted text.
-- Storage used by derived data and processing artefacts.
+| Metric | Measured value |
+|---|---:|
+| Total PDF storage | 187.04 MB |
+| Average PDF size | 6.03 MB |
+| Average storage per counted page | 100,941.45 bytes |
+| Estimated PDF storage at 2,000 pages | 192.53 MB |
 
-These measurements should be recorded before estimating final production storage requirements.
+The 2,000-page estimate is a linear projection based on the current average bytes per page. It is an estimate, not a measured final storage requirement. Storage for extracted text, OCR output, indexes, databases, and other derived artefacts has not yet been measured.
 
 ## 4. Collection throughput
 
@@ -69,7 +70,7 @@ Synthetic local tests verify downloader behaviour but are not representative of 
 
 The project includes `pypdf` for PDF page inspection.
 
-The regenerated dataset report confirms that all 31 referenced PDFs were readable for page counting, with no reported page-reading errors.
+The regenerated dataset report confirms that all 31 referenced PDFs could be read for page counting, with no reported page-reading errors. Page counting does not establish searchable-text coverage.
 
 However, extraction throughput, OCR performance, and processing cost have not yet been benchmarked against a representative corpus.
 
@@ -77,16 +78,15 @@ Scanned PDFs may require OCR. Such documents should be identified and measured s
 
 ## 6. Main constraints and risks
 
-1. **Reuse permission:** Evaluator approval for academic-project use is recorded in project notes. The source inventory still records the licence status as `Not stated`. This does not establish an open reuse licence or unrestricted redistribution rights.
+1. **Reuse restrictions:** The source inventory records the licence status as `Not stated`. This does not establish an open reuse licence or unrestricted redistribution rights.
 2. **Source coverage:** The source inventory contains three NALSA entries, while the manifest records 31 downloaded PDFs. Direct-document provenance and source-specific restrictions must remain traceable.
 3. **Document quality:** Page readability has been verified, but scanned-document quality and OCR requirements need separate assessment.
 4. **Version control:** Legal documents may be amended or superseded. Publication dates and currentness must be verified.
 5. **Storage:** Final capacity requirements depend on actual document sizes and derived artefacts.
-6. **Collection policy:** Robots.txt, website terms, evaluator approval scope, and source-specific restrictions must be respected.
+6. **Collection policy:** Robots.txt, website terms, and source-specific restrictions must be respected.
 
 ## 7. Conditions for reaching 2,000 pages
 
-- Maintain evidence of the evaluator approval and its academic-project scope.
 - Clarify source-specific reuse restrictions and third-party rights.
 - Verify the current version and direct document URL.
 - Maintain an approved source inventory with permission evidence or accurately stated licence status.
@@ -105,6 +105,6 @@ The current dataset contains 31 downloaded PDFs with 1,943 readable pages. All 3
 
 The corpus has reached 97.15% of the 2,000-page target. Another 57 verified pages are required.
 
-The dataset report and project notes must continue to distinguish evaluator approval for academic-project use from an open reuse licence. Storage, OCR, and production processing benchmarks also remain to be completed.
+The source inventory must continue to report licence status accurately. OCR, derived-storage, and production processing benchmarks remain to be completed.
 
 The 2,000-page target must only be marked complete when a regenerated dataset report confirms at least 2,000 eligible, readable pages.
