@@ -91,6 +91,7 @@ def test_extract_metadata_is_stored(test_database_url):
                 echo=lambda _: None,
             )
 
+            await session.refresh(document)
             stored = await session.scalar(select(Document).where(Document.id == document.id))
 
             assert counts["pending"] == 1
