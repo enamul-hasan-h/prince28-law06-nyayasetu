@@ -189,6 +189,7 @@ def provider_with(handler) -> OpenAICompatProvider:
 
 async def test_provider_sends_an_openai_style_request_and_reads_the_reply():
     seen = {}
+    response_format = {"type": "json_object"}
 
     def handler(request: httpx.Request) -> httpx.Response:
         seen["url"], seen["auth"] = str(request.url), request.headers["authorization"]
@@ -199,10 +200,13 @@ async def test_provider_sends_an_openai_style_request_and_reads_the_reply():
         }
         return httpx.Response(200, json=reply)
 
-    reply = await provider_with(handler).generate(ASK)
+    reply = await provider_with(handler).generate(ASK, response_format=response_format)
     assert reply == Reply("Hello.", 9, 2)
-    assert seen["url"] == "https://llm.test/v1/chat/completions" and seen["auth"] == "Bearer k-123"
-    assert seen["body"]["model"] == "m-1" and seen["body"]["messages"] == ASK
+    assert seen["url"] == "https://llm.test/v1/chat/completions"
+    assert seen["auth"] == "Bearer k-123"
+    assert seen["body"]["model"] == "m-1"
+    assert seen["body"]["messages"] == ASK
+    assert seen["body"]["response_format"] == response_format
 
 
 async def test_provider_turns_http_errors_into_llm_errors():

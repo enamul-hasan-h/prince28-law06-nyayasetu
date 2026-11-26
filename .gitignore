@@ -21,3 +21,5 @@ htmlcov/
 
 # NALSA reference PDFs: permission pending
 Day06_Research/NALSA_References/*.pdf
+
+eval/cache/
