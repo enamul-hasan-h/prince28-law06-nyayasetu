@@ -959,3 +959,5 @@ The extraction assigned a scheme value to the 2010 Regulations document. I check
 - ID 1 — Legal Services Authorities Act, 1987: Checked against India Code. Title and year are correct; the extracted summary is only the document title and is not informative.
 - ID 2 — Legal Services Authorities Act, 1987: Checked against the same India Code source. This is a duplicate record; `doc_kind` is incorrectly `rule`, and the year is missing.
 - ID 4 — Lok Adalat: Checked against the official NALSA Lok Adalats page. The extracted summary `No content available.` does not reflect the source content.
+
+- Resumability: `extract_v1` records each document's extraction status in `documents.metadata.extract` and commits after each document. A later run skips documents already processed by the same prompt version and selects remaining documents. Use `uv run python scripts/extract_metadata.py --retry-failed` to retry recorded failures. The full run processed 46 queued documents; including the earlier five-document trial, 50 succeeded and one failed.
