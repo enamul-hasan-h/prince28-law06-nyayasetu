@@ -1,13 +1,13 @@
-# NyayaSetu Implementation Notes
+﻿# NyayaSetu Implementation Notes
 
-## D03 â€“ PostgreSQL Implementation
+## D03 Ã¢â‚¬â€œ PostgreSQL Implementation
 
-### Day 3 â€“ Part 2: Database Migrations
+### Day 3 Ã¢â‚¬â€œ Part 2: Database Migrations
 
 Created two Alembic migrations for the PostgreSQL database.
 
-1. `ac53a5fd3d76` â€“ Create documents and pages.
-2. `e27f96b16ce8` â€“ Add GIN index on metadata.
+1. `ac53a5fd3d76` Ã¢â‚¬â€œ Create documents and pages.
+2. `e27f96b16ce8` Ã¢â‚¬â€œ Add GIN index on metadata.
 
 #### Migration Verification
 
@@ -20,7 +20,7 @@ Created two Alembic migrations for the PostgreSQL database.
 
 **Status:** Migration history, downgrade, and upgrade verified successfully.
 
-### Day 3 â€“ Part 3: Idempotent Database Loader
+### Day 3 Ã¢â‚¬â€œ Part 3: Idempotent Database Loader
 
 Created `scripts/load_db.py` to load legal scheme records from `data/sample_records.json` into PostgreSQL.
 
@@ -49,7 +49,7 @@ Implemented:
 
 **Status:** All three tests passed.
 
-### Day 3 â€“ Part 5: Automated Tests
+### Day 3 Ã¢â‚¬â€œ Part 5: Automated Tests
 
 Implemented API unit tests using a fake repository and fake database session.
 
@@ -73,7 +73,7 @@ Implemented API unit tests using a fake repository and fake database session.
 
 **Ruff:** All checks passed.
 
-### Day 3 â€“ Part 6: PostgreSQL EXPLAIN
+### Day 3 Ã¢â‚¬â€œ Part 6: PostgreSQL EXPLAIN
 
 Created `scripts/explain.py` to inspect PostgreSQL query plans for JSONB metadata filters.
 
@@ -106,7 +106,7 @@ As the table grows and JSONB filtering becomes more selective, PostgreSQL may ch
 
 ---
 
-## D04 â€“ Docker, Testing and Quality Automation
+## D04 Ã¢â‚¬â€œ Docker, Testing and Quality Automation
 
 ### Part 1: Production Dockerfile
 
@@ -228,7 +228,7 @@ Updated README.md with:
 
 ---
 
-## D05 â€“ CI/CD and Live Deployment
+## D05 Ã¢â‚¬â€œ CI/CD and Live Deployment
 
 ### Live Deployment
 
@@ -250,10 +250,10 @@ Updated README.md with:
 
 ### Rollback Drill
 
-- Rolled back to SHA: `61349462d3f0f81802f202150a8121cbedcf98fd` â€“ Successful.
+- Rolled back to SHA: `61349462d3f0f81802f202150a8121cbedcf98fd` Ã¢â‚¬â€œ Successful.
 - Rollback start time: Not recorded.
 - Smoke test: Passed.
-- Rolled forward to SHA: `3ab59f65b0e559f15cbf80635a6a7fd79e96e461` â€“ Successful.
+- Rolled forward to SHA: `3ab59f65b0e559f15cbf80635a6a7fd79e96e461` Ã¢â‚¬â€œ Successful.
 - Roll-forward duration: Not recorded.
 
 ### Secrets Management
@@ -276,7 +276,7 @@ Render Free service may take time to wake after inactivity.
 
 ---
 
-## D06 â€“ Corpus Collection Foundation
+## D06 Ã¢â‚¬â€œ Corpus Collection Foundation
 
 ### Part 1: Source Research and Permission Review
 
@@ -408,7 +408,7 @@ Created `docs/CAPACITY.md` to document collection throughput, storage considerat
 
 The corpus target is not marked complete. Public accessibility and sitemap discovery do not constitute reuse permission.
 
-## D07 â€“ Document Parsing and Storage
+## D07 Ã¢â‚¬â€œ Document Parsing and Storage
 
 ### Part 1: Parser Implementation
 
@@ -564,7 +564,7 @@ The optional PySocks dependency warning from urllib3 does not indicate a parser 
 
 **Overall:** The Day 07 parser, storage migration, corpus processing, OCR recovery and comparison work have been implemented and verified against the recorded results. The OCR heading limitation and unclassified empty-page records remain documented rather than being treated as fully verified.
 
-### Gemini provider diagnostics â€” 25 Nov 2026
+### Gemini provider diagnostics Ã¢â‚¬â€ 25 Nov 2026
 
 - Gemini API model listing: HTTP 200.
 - Configured model: gemini-3.8-flash.
@@ -576,7 +576,7 @@ The optional PySocks dependency warning from urllib3 does not indicate a parser 
 - Decision: retain Gemini as primary and Groq as fallback; investigate again later. No gateway migration to Interactions API.
 
 
-### Additional Gemini model tests â€” 25 Nov 2026
+### Additional Gemini model tests Ã¢â‚¬â€ 25 Nov 2026
 
 - gemini-3.7-flash: HTTP 503, high demand.
 - gemini-4-carbon: HTTP 429, free-tier generation quota limit is zero.
@@ -584,7 +584,7 @@ The optional PySocks dependency warning from urllib3 does not indicate a parser 
 - Groq openai/gpt-oss-20b: successful response.
 - Decision: retain gemini-3.8-flash as configured primary and Groq as fallback. Stop model-version experiments for now.
 
-## D08 â€” Give NyayaSetu a voice, a backup and a bill
+## D08 Ã¢â‚¬â€ Give NyayaSetu a voice, a backup and a bill
 ### 25 November 2026
 
 #### Provider comparison
@@ -659,7 +659,7 @@ This was a local simulation using fake providers and a simulated clock, not a li
 
 **Overall:** Local implementation, tests, migration and endpoint behavior have been verified. Remote CI, deployment, live Render endpoint checks, Git security verification and merge to `main` remain pending.
 
-## Day 08 â€” Step 5.1: English vs Tamil token comparison
+## Day 08 Ã¢â‚¬â€ Step 5.1: English vs Tamil token comparison
 
 | Test | Tokens in | Provider |
 |---|---:|---|
@@ -672,29 +672,29 @@ This was a local simulation using fake providers and a simulated clock, not a li
 - Observed Tamil/English ratio: 84 / 8 = 10.5x
 - Note: The Tamil call used Groq fallback, so tokenizer differences affect this comparison.
 
-## Day 08 â€” Step 5.2: Hallucination and scope testing
+## Day 08 Ã¢â‚¬â€ Step 5.2: Hallucination and scope testing
 
-### Test 1 â€” Unknown information
+### Test 1 Ã¢â‚¬â€ Unknown information
 Question: When is the next Lok Adalat in Villupuram?
 Result: The assistant replied "I'm not sure."
 Assessment: Correctly admitted uncertainty.
 
-### Test 2 â€” Off-topic question
+### Test 2 Ã¢â‚¬â€ Off-topic question
 Question: Who won the 2011 Cricket World Cup?
 Result: The assistant declined because the question was outside NyayaSetu's scope.
 Assessment: Correctly declined.
 
-### Test 3 â€” Section 12 eligibility
+### Test 3 Ã¢â‚¬â€ Section 12 eligibility
 Question: Which categories are eligible for free legal services under Section 12?
 Result: The assistant gave vague and incomplete eligibility categories and incorrectly presented types of legal disputes as eligibility categories.
 Assessment: Hallucination / incomplete legal answer detected.
 
-### Test 4 â€” Lok Adalat award
+### Test 4 Ã¢â‚¬â€ Lok Adalat award
 Question: What is the legal effect of a Lok Adalat award, and can it be appealed?
 Result: The assistant correctly explained finality, binding effect and non-appealability, but incorrectly suggested filing a regular civil suit within 30 days.
 Assessment: Legal hallucination detected.
 
-## Day 08 â€” Step 5.3: Primary failure, circuit breaker and recovery
+## Day 08 Ã¢â‚¬â€ Step 5.3: Primary failure, circuit breaker and recovery
 
 ### Controlled primary failure
 - Temporarily configured `LLM_PRIMARY_MODEL=gemini-no-such-model`.
@@ -712,7 +712,7 @@ Assessment: Legal hallucination detected.
 
 Assessment: Circuit opening, request skipping, half-open retry, fallback and primary-provider recovery verified.
 
-## Day 08 â€” Step 5.4: Usage and database reconciliation
+## Day 08 Ã¢â‚¬â€ Step 5.4: Usage and database reconciliation
 
 ### Usage endpoint
 Date: 2026-11-25
@@ -905,7 +905,7 @@ Evaluation set: 20 questions. TODO placeholders skipped: 0.
 
 <!-- prompts:end -->
 
-### Step 3 · Evaluation notes
+### Step 3 Â· Evaluation notes
 
 - `classify_v2` remains the preferred version: 20/20 correct with the lowest average input-token usage among the versions achieving 100%.
 - `classify_v3` also achieved 20/20 but used more input tokens.
@@ -928,7 +928,7 @@ Evaluation set: 20 questions. TODO placeholders skipped: 0.
 - Found an incorrect project-specific value: the 2010 Regulations document was assigned a scheme value. Corrected its scheme metadata to an empty list in Neon because it is a regulation, not a scheme.
 - Confirmed the 2018 Compensation Scheme's project-specific values were concise and relevant to the source.
 
-### D09 · Prompts and structured output
+### D09 Â· Prompts and structured output
 
 - My best router prompt: `classify_v2` with 20 / 20.
 - What I changed in v4, and what happened to the score: Clarified the boundary between `personal` and `docs`. Accuracy remained 20/20, with no improvement over v2. v4 used more input tokens.
@@ -944,7 +944,7 @@ Evaluation set: 20 questions. TODO placeholders skipped: 0.
 
 ### Extraction run
 
-- Prompt version: `extract_v1` · documents: 45 ok, 4 repaired, 1 failed (of 46 processed in the full run). Including the earlier five-document trial, 50 documents were successfully extracted and one failed.
+- Prompt version: `extract_v1` Â· documents: 45 ok, 4 repaired, 1 failed (of 46 processed in the full run). Including the earlier five-document trial, 50 documents were successfully extracted and one failed.
 - Not finished? The run processed its full queue. One document failed; no queued documents were left in that run.
 - Most common failure reason, and what I did about it: `the reply contains no JSON object` occurred once. Identified the affected document as COMPENDIUM OF SCHEMES (ID 26). Left the isolated failure recorded; no retry or prompt change was made.
 - A record that was valid but wrong (document, field, what it said, what is true): NALSA (Free and Competent Legal Services) Regulations, 2010 (ID 3), `scheme`: it incorrectly contained the Regulations title. Corrected the value to an empty list because the document is a regulation, not a scheme.
@@ -954,10 +954,46 @@ Evaluation set: 20 questions. TODO placeholders skipped: 0.
 
 The extraction assigned a scheme value to the 2010 Regulations document. I checked it against the source document, corrected its `scheme` metadata to an empty list in Neon, and verified the corrected value. One other document failed because the model reply contained no JSON object; I identified and recorded that isolated failure.
 
-#### Manual source checks — additional records
+#### Manual source checks â€” additional records
 
-- ID 1 — Legal Services Authorities Act, 1987: Checked against India Code. Title and year are correct; the extracted summary is only the document title and is not informative.
-- ID 2 — Legal Services Authorities Act, 1987: Checked against the same India Code source. This is a duplicate record; `doc_kind` is incorrectly `rule`, and the year is missing.
-- ID 4 — Lok Adalat: Checked against the official NALSA Lok Adalats page. The extracted summary `No content available.` does not reflect the source content.
+- ID 1 â€” Legal Services Authorities Act, 1987: Checked against India Code. Title and year are correct; the extracted summary is only the document title and is not informative.
+- ID 2 â€” Legal Services Authorities Act, 1987: Checked against the same India Code source. This is a duplicate record; `doc_kind` is incorrectly `rule`, and the year is missing.
+- ID 4 â€” Lok Adalat: Checked against the official NALSA Lok Adalats page. The extracted summary `No content available.` does not reflect the source content.
 
 - Resumability: `extract_v1` records each document's extraction status in `documents.metadata.extract` and commits after each document. A later run skips documents already processed by the same prompt version and selects remaining documents. Use `uv run python scripts/extract_metadata.py --retry-failed` to retry recorded failures. The full run processed 46 queued documents; including the earlier five-document trial, 50 succeeded and one failed.
+
+
+### D10 ? Queue and worker
+
+- First run: 6 documents queued, finished in 159 s. Done 6, skipped 0, failed 0.
+- Pace: 26.5 s per document (INGEST_RPM = pending, INGEST_CONCURRENCY = pending).
+
+### Kill test
+
+- Queued: 20. At the kill: counts not recorded here.
+- After the new worker: recovery counts pending verification.
+- Documents in the database: pending verification, different ids: pending verification.
+- The interrupted items came back after: pending verification.
+- Why nothing was doubled: pending verification from database evidence.
+
+### Dead-letter list
+
+| Stage (parse / extract / download / gave up) | Items | What I did |
+|---|---:|---|
+| Parse: no_text_layer | 20 | Identified PDFs requiring OCR investigation |
+| Gave up | 1 | Identified item exhausting three processing attempts |
+
+### Live ingestion
+
+- NyayaSetu on Render: pending Step 7 verification.
+- A request without the token gets status: pending Step 7 verification.
+
+### Week 2 against Monday's estimate
+
+- docs/CAPACITY.md said: 1,943 PDF pages; token estimate not recorded.
+- docs/INGEST_REPORT.md says: 1,475 database pages, 593,309 estimated tokens.
+- The difference: 468 fewer pages in the processed database. These figures represent different processing stages and require document-level reconciliation.
+
+### One thing that went wrong today, and how I fixed it
+
+- The ingestion report script was missing. Created scripts/ingest_report.py and successfully generated the report from the database.
