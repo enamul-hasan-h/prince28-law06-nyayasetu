@@ -150,3 +150,6 @@ async def test_a_document_that_keeps_killing_the_worker_is_given_up(world):
     assert await ingest_document(ctx, item_id) == "failed"
     assert "never finished" in (await world["item"](item_id)).error
     assert await world["count"](Document) == 0
+
+
+pytestmark = pytest.mark.integration
