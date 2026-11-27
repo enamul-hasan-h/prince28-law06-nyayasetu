@@ -6,6 +6,7 @@ x-app-environment: &app-environment
   LOG_LEVEL: INFO
   DATA_FILE: data/sample_records.json
   DATABASE_URL: postgresql://app:app@db:5432/app # pragma: allowlist secret
+  REDIS_URL: redis://redis:6379
 
 services:
   db:
@@ -49,6 +50,9 @@ services:
   api:
     build: .
     environment: *app-environment
+    env_file: &keys
+      - path: .env
+        required: false
     ports:
       - "8000:8000"
     depends_on:
@@ -68,6 +72,21 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+  worker:
+    build: .
+    command: ["arq", "nyayasetu.workers.main.WorkerSettings"]
+    environment: *app-environment
+    env_file: *keys
+    volumes:
+      - ./data/raw:/app/data/raw:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
 
 volumes:
   pgdata:

@@ -1,20 +1,17 @@
-"""Application factory for the NyayaSetu API."""
+"""App factory: build a fully wired FastAPI app from settings."""
 
+import asyncio
 import logging
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 
-from fastapi import FastAPI
-from fastapi.exceptions import RequestValidationError
+from fastapi import APIRouter, FastAPI
 
-from nyayasetu.api.errors import (
-    http_exception_handler,
-    validation_exception_handler,
-)
-from nyayasetu.api.middleware import RequestContextMiddleware
-from nyayasetu.api.routes import chat, documents, health
+from nyayasetu.api.errors import register_error_handlers
+from nyayasetu.api.middleware import request_context
+from nyayasetu.api.routes import chat, documents, health, ingest
 from nyayasetu.config import Settings, get_settings
 from nyayasetu.db.llm_calls import make_recorder
-from nyayasetu.db.session import SessionLocal, engine
+from nyayasetu.db.session import make_engine, make_sessionmaker
 from nyayasetu.llm.gateway import build_gateway
 from nyayasetu.logging_setup import setup_logging
 
@@ -23,52 +20,45 @@ logger = logging.getLogger("nyayasetu")
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or get_settings()
-
     setup_logging(settings.log_level)
+    engine = make_engine(settings)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        logger.info("NyayaSetu API started")
+        logger.info("starting", extra={"status": settings.app_env})
+        worker = None
+        if settings.worker_in_api:
+            from nyayasetu.workers.main import run_embedded
 
-        try:
-            yield
-        finally:
-            await engine.dispose()
-            logger.info("NyayaSetu API stopped")
+            worker = asyncio.create_task(run_embedded(settings))
+        yield
+        if worker:
+            worker.cancel()
+            with suppress(asyncio.CancelledError):
+                await worker
+        if getattr(app.state, "queue", None):
+            await app.state.queue.close()
+        await engine.dispose()
 
     app = FastAPI(
-        title="NyayaSetu API",
+        title=settings.app_name,
         version="0.2.0",
         lifespan=lifespan,
     )
-
     app.state.settings = settings
     app.state.engine = engine
-    app.state.session_factory = SessionLocal
+    app.state.sessionmaker = make_sessionmaker(engine)
     app.state.system_prompt = chat.load_prompt(settings.prompts_dir)
-    app.state.gateway = build_gateway(
-        settings,
-        make_recorder(SessionLocal),
-    )
+    app.state.gateway = build_gateway(settings, make_recorder(app.state.sessionmaker))
 
-    app.add_middleware(RequestContextMiddleware)
+    app.middleware("http")(request_context)
+    register_error_handlers(app)
 
-    app.add_exception_handler(
-        404,
-        http_exception_handler,
-    )
-    app.add_exception_handler(
-        405,
-        http_exception_handler,
-    )
-    app.add_exception_handler(
-        RequestValidationError,
-        validation_exception_handler,
-    )
+    v1 = APIRouter(prefix="/v1")
+    v1.include_router(documents.router)
+    v1.include_router(chat.router)
+    v1.include_router(ingest.router)
 
     app.include_router(health.router)
-
-    app.include_router(documents.router, prefix="/v1")
-    app.include_router(chat.router, prefix="/v1")
-
+    app.include_router(v1)
     return app

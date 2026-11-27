@@ -69,3 +69,15 @@ async def validation_exception_handler(
             "errors": errors,
         },
     )
+
+
+def register_error_handlers(app) -> None:
+    """Register consistent RFC 9457 error handlers."""
+    app.add_exception_handler(
+        StarletteHTTPException,
+        http_exception_handler,
+    )
+    app.add_exception_handler(
+        RequestValidationError,
+        validation_exception_handler,
+    )
