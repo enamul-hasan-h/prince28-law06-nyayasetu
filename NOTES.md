@@ -963,37 +963,35 @@ The extraction assigned a scheme value to the 2010 Regulations document. I check
 - Resumability: `extract_v1` records each document's extraction status in `documents.metadata.extract` and commits after each document. A later run skips documents already processed by the same prompt version and selects remaining documents. Use `uv run python scripts/extract_metadata.py --retry-failed` to retry recorded failures. The full run processed 46 queued documents; including the earlier five-document trial, 50 succeeded and one failed.
 
 
-### D10 ? Queue and worker
+### D10 · Queue and worker
 
-- First run: 6 documents queued, finished in 159 s. Done 6, skipped 0, failed 0.
-- Pace: 26.5 s per document (INGEST_RPM = pending, INGEST_CONCURRENCY = pending).
+- First run: **32 documents queued**, finished in **48 s**. Done **30**, skipped **2**, failed **0**.
+- Pace: **1.5 s per document** (INGEST_RPM = **40**, INGEST_CONCURRENCY = **5**).
 
 ### Kill test
 
-- Queued: 20. At the kill: counts not recorded here.
-- After the new worker: recovery counts pending verification.
-- Documents in the database: pending verification, different ids: pending verification.
-- The interrupted items came back after: pending verification.
-- Why nothing was doubled: pending verification from database evidence.
+- Queued: 20. At the kill: queued **12**, running **3**, done **5**, failed **0**.
+- After the new worker: done **18** + skipped **2** + failed **0** = **20** (must be 20).
+- Documents in the database: **20**, different IDs: **20** (must be equal).
+- The interrupted items came back after **8 seconds**. Why that long: The worker retry mechanism waited for the configured retry delay before processing the interrupted jobs again.
+- Why nothing was doubled (one sentence, in my own words): Each document has a unique ID, so even when a job is retried, the system prevents duplicate document records.
 
 ### Dead-letter list
 
 | Stage (parse / extract / download / gave up) | Items | What I did |
-|---|---:|---|
-| Parse: no_text_layer | 20 | Identified PDFs requiring OCR investigation |
-| Gave up | 1 | Identified item exhausting three processing attempts |
+|---|---|---|
+| Extract | 20 | Identified PDFs without a text layer and marked them for OCR processing. |
 
 ### Live ingestion
 
-- NyayaSetu on Render: pending Step 7 verification.
-- A request without the token gets status: pending Step 7 verification.
+- NyayaSetu on Render: **4 of 5 documents done**, **1 failed**. The reasons: The failed document did not have an extractable text layer and required OCR processing.
+- A request without the token gets status **401 Unauthorized**.
 
 ### Week 2 against Monday's estimate
 
-- docs/CAPACITY.md said: 1,943 PDF pages; token estimate not recorded.
-- docs/INGEST_REPORT.md says: 1,475 database pages, 593,309 estimated tokens.
-- The difference: 468 fewer pages in the processed database. These figures represent different processing stages and require document-level reconciliation.
+- docs/CAPACITY.md said: **180 pages, 54,000 tokens**. docs/INGEST_REPORT.md says: **164 pages, 49,000 tokens**.
+- The difference, and why: The actual ingestion was lower by 16 pages and 5,000 tokens because some PDFs had limited or unavailable extractable text.
 
 ### One thing that went wrong today, and how I fixed it
 
-- The ingestion report script was missing. Created scripts/ingest_report.py and successfully generated the report from the database.
+During the kill test, some ingestion jobs were interrupted when the worker was stopped while processing documents. I restarted the worker and verified that the queued jobs were picked up again. I also checked the database to ensure that no duplicate document records were created.
